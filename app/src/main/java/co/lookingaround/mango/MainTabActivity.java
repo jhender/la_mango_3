@@ -1,7 +1,10 @@
 package co.lookingaround.mango;
 
+import java.util.List;
 import java.util.Locale;
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -10,14 +13,22 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
+import com.parse.SaveCallback;
 
 public class MainTabActivity extends ActionBarActivity implements ActionBar.TabListener {
 
@@ -170,15 +181,124 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     public static class PopularFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public static PopularFragment newInstance() {
-            PopularFragment fragment = new PopularFragment();
+        ListView popularListView;
+        LinearLayout emptyItemView;
+        private ParseQueryAdapter<Hashmap> popularListAdapter;
+        private LayoutInflater inflater;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+//            setContentView(R.layout.fragment_main_tab_popular);
+
             Bundle args = new Bundle();
-            return fragment;
+
+//            popularListView = (ListView) findViewById(R.id.popularListView);
+
+            // Set up the Parse query to use in the adapter
+            ParseQueryAdapter.QueryFactory<Hashmap> factory = new ParseQueryAdapter.QueryFactory<Hashmap>() {
+                public ParseQuery<Hashmap> create() {
+                    ParseQuery<Hashmap> query = Hashmap.getQuery();
+                    query.orderByAscending("createdAt");
+                    query.fromLocalDatastore();
+                    return query;
+                }
+            };
+
+            loadFromParse();
+
+//            popularListAdapter = new ParseQueryAdapter<>(getActivity(), factory);
+            popularListAdapter = new popularListAdapter(getActivity(), factory);
+
+            Log.i("popularListActivity", "on activity created" + popularListAdapter);
+
         }
+
+        private class popularListAdapter extends ParseQueryAdapter<Hashmap> {
+
+            public popularListAdapter(Context context, QueryFactory<Hashmap> queryFactory) {
+                super(context, queryFactory);
+            }
+
+            @Override
+            public View getItemView(Hashmap hashmap, View view, ViewGroup parent) {
+                ViewHolder holder;
+                if (view == null) {
+                    inflater = getActivity().getLayoutInflater();
+                    view = inflater.inflate(R.layout.list_item_hashmap, parent, false);
+                    holder = new ViewHolder();
+                    holder.hashmapTitle = (TextView) view
+                            .findViewById(R.id.hashmap_title);
+                    view.setTag(holder);
+                } else {
+                    holder = (ViewHolder) view.getTag();
+                }
+                TextView hashmapTitle = holder.hashmapTitle;
+                hashmapTitle.setText(hashmap.getTitle());
+                if (hashmap.isDraft()) {
+                    hashmapTitle.setTypeface(null, Typeface.ITALIC);
+                } else {
+                    hashmapTitle.setTypeface(null, Typeface.NORMAL);
+                }
+                return view;
+            }
+        }
+
+        private static class ViewHolder {
+            TextView hashmapTitle;
+        }
+
+        private void loadFromParse() {
+            ParseQuery<Hashmap> query = Hashmap.getQuery();
+//            query.whereEqualTo("isDraft", false);
+            query.findInBackground(new FindCallback<Hashmap>() {
+                public void done(List<Hashmap> hashmaps, ParseException e) {
+                    if (e == null) {
+                        ParseObject.pinAllInBackground( hashmaps,
+                                new SaveCallback() {
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+//                                            if (!isFinishing()) {
+                                                popularListAdapter.loadObjects();
+                                            Log.i(
+                                                    "popularListactivity", "retrieved, loadobjects"
+                                             );
+
+                                            Log.i("popularListActivity", "after loadobjects" + popularListAdapter);
+
+//                                            }
+                                        } else {
+                                            Log.i("popularListActivity",
+                                                    "Error pinning hashmaps: " + e.getMessage());
+                                        }
+                                    }
+                                });
+                    } else {
+                        Log.i("popularListActivity",
+                                "loadFromParse: Error finding pinned hashmaps: "
+                                        + e.getMessage());
+                    }
+                }
+            });
+        }
+
+
+//        public static PopularFragment newInstance() {
+//            PopularFragment fragment = new PopularFragment();
+//            Bundle args = new Bundle();
+//            return fragment;
+//        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main_tab_popular, container, false);
+
+            ListView popularListView = (ListView) rootView.findViewById(R.id.popularListView);
+            LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
+            popularListView.setEmptyView(emptyView);
+            popularListView.setAdapter(popularListAdapter);
+
+            Log.i("popularListActivity", "return view" + popularListAdapter);
             return rootView;
         }
     }
@@ -217,5 +337,9 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             return rootView;
         }
     }
+
+
+
+
 
 }
