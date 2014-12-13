@@ -13,6 +13,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+/*
+ * Deprecated Activity
+ */
 public class NewHashmapActivity extends Activity {
 
     Button saveButton;

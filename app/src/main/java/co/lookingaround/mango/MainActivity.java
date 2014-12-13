@@ -16,6 +16,9 @@ import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.ui.ParseLoginBuilder;
 
+/*
+ * Deprecated Activity
+ */
 public class MainActivity extends ActionBarActivity {
 
     private static final int LOGIN_REQUEST = 0;

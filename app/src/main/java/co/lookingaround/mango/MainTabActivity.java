@@ -1,5 +1,6 @@
 package co.lookingaround.mango;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,9 +21,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -32,6 +35,10 @@ import com.parse.ParseQueryAdapter;
 import com.parse.SaveCallback;
 
 public class MainTabActivity extends ActionBarActivity implements ActionBar.TabListener {
+
+    private static String currentSelectedHashmapTitle = "Hashmap";
+    private static String currentSelectedHashmapId = "id";
+    private static Hashmap currentSelectedHashmap = new Hashmap();
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -153,9 +160,11 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                 case 0:
                     return new PopularFragment();
                 case 1:
-                    return PlaceholderFragment.newInstance(position);
+//                    return PlaceholderFragment.newInstance(position);
+                    return new HashmapItemFragment();
                 case 2:
-                    return new PopularFragment();
+                    return PlaceholderFragment.newInstance(position);
+//                    return new PopularFragment();
             }
             return null;
         }
@@ -292,13 +301,167 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             popularListView.setEmptyView(emptyView);
             popularListView.setAdapter(popularListAdapter);
 
+            popularListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    Hashmap hashmap = popularListAdapter.getItem(position);
+                    currentSelectedHashmapTitle = hashmap.getTitle();
+                    currentSelectedHashmapId = hashmap.getObjectId();
+                    currentSelectedHashmap = hashmap;
+                    Toast.makeText(getActivity(), "Item clicked " + currentSelectedHashmapTitle, Toast.LENGTH_SHORT).show();
+
+                    // Go to next Fragment
+//                    jumpToSection2();
+
+
+                }
+            });
+
             Log.i("popularListActivity", "return view" + popularListAdapter);
+            return rootView;
+        }
+    }
+
+    /**
+     * Show the list of Popular Hashmaps
+     * Make Clickable to jump to Map Fragment
+     */
+    public static class HashmapItemFragment extends Fragment {
+
+        private ParseQueryAdapter<HashmapItem> hashmapItemListAdapter;
+        private LayoutInflater inflater;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            // Set up the Parse query to use in the adapter
+            ParseQueryAdapter.QueryFactory<HashmapItem> factory = new ParseQueryAdapter.QueryFactory<HashmapItem>() {
+                public ParseQuery<HashmapItem> create() {
+                    ParseQuery<HashmapItem> query = HashmapItem.getQuery();
+                    query.orderByDescending("createdAt");
+                    query.fromLocalDatastore();
+                    return query;
+                }
+            };
+
+
+
+            loadFromParse();
+
+//            popularListAdapter = new ParseQueryAdapter<>(getActivity(), factory);
+            hashmapItemListAdapter = new hashmapItemListAdapter(getActivity(), factory);
+
+            Log.i("hashmapitemListActivity", "on activity created" + hashmapItemListAdapter);
+        }
+
+        private class hashmapItemListAdapter extends ParseQueryAdapter<HashmapItem> {
+
+            public hashmapItemListAdapter(Context context, QueryFactory<HashmapItem> queryFactory) {
+                super(context, queryFactory);
+            }
+
+            @Override
+            public View getItemView(HashmapItem hashmapitem, View view, ViewGroup parent) {
+                ViewHolder holder;
+                if (view == null) {
+                    inflater = getActivity().getLayoutInflater();
+                    view = inflater.inflate(R.layout.list_item_hashmap, parent, false);
+                    holder = new ViewHolder();
+                    holder.hashmapTitle = (TextView) view
+                            .findViewById(R.id.hashmap_title);
+                    view.setTag(holder);
+                } else {
+                    holder = (ViewHolder) view.getTag();
+                }
+                TextView hashmapTitle = holder.hashmapTitle;
+                hashmapTitle.setText(hashmapitem.getTitle());
+                if (hashmapitem.isDraft()) {
+                    hashmapTitle.setTypeface(null, Typeface.ITALIC);
+                } else {
+                    hashmapTitle.setTypeface(null, Typeface.NORMAL);
+                }
+                return view;
+            }
+        }
+
+        private static class ViewHolder {
+            TextView hashmapTitle;
+        }
+
+        private void loadFromParse() {
+            ParseQuery<HashmapItem> query = HashmapItem.getQuery();
+//            query.whereEqualTo("isDraft", false);
+            query.findInBackground(new FindCallback<HashmapItem>() {
+                public void done(List<HashmapItem> hashmapitems, ParseException e) {
+                    if (e == null) {
+                        ParseObject.pinAllInBackground( hashmapitems,
+                                new SaveCallback() {
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+//                                            if (!isFinishing()) {
+                                            hashmapItemListAdapter.loadObjects();
+                                            Log.i(
+                                                    "hmitemListactivity", "retrieved, loadobjects"
+                                            );
+
+                                            Log.i("hmitemListactivity", "after loadobjects" + hashmapItemListAdapter);
+
+//                                            }
+                                        } else {
+                                            Log.i("hmitemListactivity",
+                                                    "Error pinning hashmaps: " + e.getMessage());
+                                        }
+                                    }
+                                });
+                    } else {
+                        Log.i("popularListActivity",
+                                "loadFromParse: Error finding pinned hashmaps: "
+                                        + e.getMessage());
+                    }
+                }
+            });
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main_tab_hashmapitemlist, container, false);
+
+            ListView hmitemListView = (ListView) rootView.findViewById(R.id.hashmap_item_list_view);
+            LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
+            hmitemListView.setEmptyView(emptyView);
+            hmitemListView.setAdapter(hashmapItemListAdapter);
+
+            hmitemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    HashmapItem hashmapitem = hashmapItemListAdapter.getItem(position);
+                    currentSelectedHashmapTitle = hashmapitem.getTitle();
+                    Toast.makeText(getActivity(), "Item clicked " + currentSelectedHashmapTitle, Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+
+            //Load the related items
+            ArrayList<ParseObject> hashmapItemArrayList = (ArrayList<ParseObject>) currentSelectedHashmap.get("hashmapItemList");
+            Log.i("MainTabActivity","attempt retrieve array" + hashmapItemArrayList);
+
+            if (hashmapItemArrayList != null) {
+                HashmapItem hmitem1 = (HashmapItem) hashmapItemArrayList.get(0);
+                Log.i("MainTabActivity", "get first item " + hmitem1.getTitle());
+            }
+
+            Log.i("hashmapitemListActivity", "return view" + hashmapItemListAdapter);
             return rootView;
 
 
         }
     }
-
 
 
     /**
@@ -334,7 +497,10 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         }
     }
 
-
+    private void jumpToSection2() {
+        mViewPager.setCurrentItem(2);
+//        mViewPager.
+    }
 
 
 

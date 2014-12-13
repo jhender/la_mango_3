@@ -35,6 +35,9 @@ import java.util.List;
 /**
  * Created by jianhui.ho on 12/8/2014.
  * List and Sync application
+ *
+ * Deprecated Activity
+ *
  */
 public class HashmapList extends ActionBarActivity {
 

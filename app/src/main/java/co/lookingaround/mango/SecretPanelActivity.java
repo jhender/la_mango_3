@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -19,11 +21,15 @@ public class SecretPanelActivity extends ActionBarActivity {
     Button button2;
     Button button3;
     Button button4;
+    TextView textView1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secret_panel);
+
+        textView1 = (TextView)findViewById(R.id.textView2);
+        textView1.setText("Current User: " + ParseUser.getCurrentUser().toString());
 
         button2 = (Button)findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener()
@@ -105,7 +111,6 @@ public class SecretPanelActivity extends ActionBarActivity {
                                         hashmap1.put("hashmapItemList", HashmapItemsArray);
                                         hashmap1.saveEventually();
                                         Log.i("retrieve hashmap", "end");
-
 
 
                                     } else {
