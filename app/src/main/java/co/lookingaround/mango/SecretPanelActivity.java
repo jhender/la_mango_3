@@ -58,7 +58,6 @@ public class SecretPanelActivity extends ActionBarActivity {
 
 
     private void createhashmapitem() {
-        //TODO temporary code
         HashmapItem hmItem;
             hmItem = new HashmapItem();
             hmItem.setUuidString();
@@ -70,7 +69,6 @@ public class SecretPanelActivity extends ActionBarActivity {
     }
 
     private void addHashMap() {
-        //TODO temporary code
         Hashmap hm;
         hm = new Hashmap();
         hm.setUuidString();
@@ -80,10 +78,8 @@ public class SecretPanelActivity extends ActionBarActivity {
     }
 
     private void linkHashMap() {
-        //TODO temporary code
 
         //Get Main Object
-        final Hashmap hashmap1;
 
         ParseQuery<Hashmap> query = ParseQuery.getQuery("Hashmap");
         query.getInBackground("IMrgX3KPxo", new GetCallback<Hashmap>() {
@@ -96,7 +92,6 @@ public class SecretPanelActivity extends ActionBarActivity {
 
 
                             //Get subobjects
-                            HashmapItem hashmapItem;
                             ParseQuery<HashmapItem> query2 = ParseQuery.getQuery("HashmapItem");
                             query2.getInBackground("AXfhaoEkm0", new GetCallback<HashmapItem>() {
                                 public void done(HashmapItem hashmapItem, ParseException e) {
@@ -104,7 +99,7 @@ public class SecretPanelActivity extends ActionBarActivity {
                                         Log.i("retrieve hashmapitem", "retrieved");
 
                                         //Build array
-                                        ArrayList<ParseObject> HashmapItemsArray = new ArrayList<ParseObject>();
+                                        ArrayList<ParseObject> HashmapItemsArray = new ArrayList<>();
                                         HashmapItemsArray.add(hashmapItem);
 
                                         //Link to Main Object
