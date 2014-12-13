@@ -6,7 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 
@@ -53,42 +56,63 @@ public class SecretPanelActivity extends ActionBarActivity {
 
     private void linkHashMap() {
         //TODO temporary code
-//        ParseObject hashmap1 = get something
-        ArrayList<ParseObject> HashmapItems = new ArrayList<ParseObject>();
-//        hashmap1.add(item1);
-//        hashmap1.add(item2);
+
+        //Get Main Object
+        final Hashmap hashmap1;
+
+        ParseQuery<Hashmap> query = ParseQuery.getQuery("Hashmap");
+        query.getInBackground("IMrgX3KPxo", new GetCallback<Hashmap>() {
+                    public void done(final Hashmap hashmap1, ParseException e) {
+                        if (e == null) {
+//                            objectWasRetrievedSuccessfully(object);
+
+//                            hashmap1 = object;
+                            Log.i("retrieve hashmap", "retrieved");
+
+
+                            //Get subobjects
+                            HashmapItem hashmapItem;
+                            ParseQuery<HashmapItem> query2 = ParseQuery.getQuery("HashmapItem");
+                            query2.getInBackground("AXfhaoEkm0", new GetCallback<HashmapItem>() {
+                                public void done(HashmapItem hashmapItem, ParseException e) {
+                                    if (e == null) {
+                                        Log.i("retrieve hashmapitem", "retrieved");
+
+                                        //Build array
+                                        ArrayList<ParseObject> HashmapItemsArray = new ArrayList<ParseObject>();
+                                        HashmapItemsArray.add(hashmapItem);
+
+                                        //Link to Main Object
+                                        hashmap1.put("hashmapItemList", HashmapItemsArray);
+                                        hashmap1.saveEventually();
+                                        Log.i("retrieve hashmap", "end");
+
+
+
+                                    } else {
+                                        Log.i("retrieve hashmapitem", "failed");
+                                    }
+                                }
+                            });
+
+
+
+                        } else {
+                            Log.i("retrieve hashmap", "failed");
+                        }
+                    }
+                });
+
+
+
+
+
     }
 
 
 
-
-
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_secret_panel, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-
-
-
-
-
 }
+
+//[{"__type":"Pointer","className":"HashmapItem","objectId":"iAnN0VmuKD"}]
+//[{"__type":"Pointer","className":"HashmapItem","objectId":"hQTfvXur56"}]
+//[{"__type":"Pointer","className":"HashmapItem","objectId":"AXfhaoEkm0"}]

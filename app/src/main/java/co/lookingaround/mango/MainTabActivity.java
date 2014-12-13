@@ -188,19 +188,14 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     public static class PopularFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        ListView popularListView;
-        LinearLayout emptyItemView;
         private ParseQueryAdapter<Hashmap> popularListAdapter;
         private LayoutInflater inflater;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-//            setContentView(R.layout.fragment_main_tab_popular);
 
             Bundle args = new Bundle();
-
-//            popularListView = (ListView) findViewById(R.id.popularListView);
 
             // Set up the Parse query to use in the adapter
             ParseQueryAdapter.QueryFactory<Hashmap> factory = new ParseQueryAdapter.QueryFactory<Hashmap>() {
@@ -287,14 +282,6 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                 }
             });
         }
-
-
-
-//        public static PopularFragment newInstance() {
-//            PopularFragment fragment = new PopularFragment();
-//            Bundle args = new Bundle();
-//            return fragment;
-//        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
