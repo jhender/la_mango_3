@@ -17,7 +17,8 @@ public class HashmapApplication extends Application {
 		
 		// add Hashmap subclass
 		ParseObject.registerSubclass(Hashmap.class);
-		
+        ParseObject.registerSubclass(HashmapItem.class);
+
 		// enable the Local Datastore
 		Parse.enableLocalDatastore(getApplicationContext());
 		Parse.initialize(this, "hfhVukFAkDhY90KnLStI5k8phj2gtmaau05nIo5w", "Awt2mfIyP6wXdtjRLSWuyXPngRaOsgKaFNPwljxc");
