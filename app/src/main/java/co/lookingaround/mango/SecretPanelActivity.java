@@ -18,6 +18,7 @@ public class SecretPanelActivity extends ActionBarActivity {
 
     Button button2;
     Button button3;
+    Button button4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +40,37 @@ public class SecretPanelActivity extends ActionBarActivity {
                 linkHashMap();
             }
         });
+
+        button4 = (Button)findViewById(R.id.button4);
+        button4.setOnClickListener(new View.OnClickListener()
+        {   public void onClick(View v)
+            {
+                addHashMap();
+            }
+        });
     }
 
 
     private void createhashmapitem() {
         //TODO temporary code
         HashmapItem hmItem;
-        hmItem = new HashmapItem();
-        hmItem.setUuidString();
-        hmItem.setTitle("Cafe 3");
-        hmItem.setAddress("10 Changi Road, Singapore");
-        hmItem.setDescription("Place with great coffee and cakes.");
+            hmItem = new HashmapItem();
+            hmItem.setUuidString();
+            hmItem.setTitle("Cafe 5");
+            hmItem.setAddress("10 Changi Road, Singapore");
+            hmItem.setDescription("Place with great coffee and cakes.");
         hmItem.saveEventually();
-        Log.i("MainTabActivity", "createHashmapItem");
+        Log.i("secretActivity", "createHashmapItem");
+    }
+
+    private void addHashMap() {
+        //TODO temporary code
+        Hashmap hm;
+        hm = new Hashmap();
+        hm.setUuidString();
+        hm.setTitle("#FaveShops");
+        hm.saveEventually();
+        Log.i("SecretActivity", "addHashmap");
     }
 
     private void linkHashMap() {

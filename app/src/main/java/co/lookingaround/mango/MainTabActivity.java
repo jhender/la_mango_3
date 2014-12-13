@@ -201,7 +201,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             ParseQueryAdapter.QueryFactory<Hashmap> factory = new ParseQueryAdapter.QueryFactory<Hashmap>() {
                 public ParseQuery<Hashmap> create() {
                     ParseQuery<Hashmap> query = Hashmap.getQuery();
-                    query.orderByAscending("createdAt");
+                    query.orderByDescending("createdAt");
                     query.fromLocalDatastore();
                     return query;
                 }
