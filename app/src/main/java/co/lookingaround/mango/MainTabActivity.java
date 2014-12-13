@@ -163,6 +163,10 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         }
     }
 
+    /**
+     * Show the list of Popular Hashmaps
+     * Make Clickable to jump to Map Fragment
+     */
     public static class PopularFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
 
