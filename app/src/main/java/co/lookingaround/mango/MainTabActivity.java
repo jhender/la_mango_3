@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -104,6 +105,12 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.secret_panel) {
+            Intent intent = new Intent(this, SecretPanelActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -211,7 +218,6 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             popularListAdapter = new popularListAdapter(getActivity(), factory);
 
             Log.i("popularListActivity", "on activity created" + popularListAdapter);
-
         }
 
         private class popularListAdapter extends ParseQueryAdapter<Hashmap> {
@@ -283,6 +289,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         }
 
 
+
 //        public static PopularFragment newInstance() {
 //            PopularFragment fragment = new PopularFragment();
 //            Bundle args = new Bundle();
@@ -300,6 +307,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 
             Log.i("popularListActivity", "return view" + popularListAdapter);
             return rootView;
+
+
         }
     }
 

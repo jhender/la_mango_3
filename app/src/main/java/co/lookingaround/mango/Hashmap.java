@@ -54,11 +54,5 @@ public class Hashmap extends ParseObject {
         return ParseQuery.getQuery(Hashmap.class);
     }
 
-    /* TODO Two options:
-     * Add another subclass for the individual pins
-     * or Add a hash of the items inside here. Easy to push and pull but super difficult to edit.
-     *
-      */
-
 
 }

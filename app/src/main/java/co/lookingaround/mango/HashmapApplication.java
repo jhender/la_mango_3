@@ -23,8 +23,8 @@ public class HashmapApplication extends Application {
 		Parse.enableLocalDatastore(getApplicationContext());
 		Parse.initialize(this, "hfhVukFAkDhY90KnLStI5k8phj2gtmaau05nIo5w", "Awt2mfIyP6wXdtjRLSWuyXPngRaOsgKaFNPwljxc");
 		ParseUser.enableAutomaticUser();
-		ParseACL defaultACL = new ParseACL();
-		ParseACL.setDefaultACL(defaultACL, true);	
+//		ParseACL defaultACL = new ParseACL();
+//		ParseACL.setDefaultACL(defaultACL, true);
 	}
 	
 	

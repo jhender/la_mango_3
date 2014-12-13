@@ -54,6 +54,22 @@ public class HashmapItem extends ParseObject {
         return ParseQuery.getQuery(HashmapItem.class);
     }
 
+    public String getAddress() {
+        return getString("address");
+    }
+
+    public void setAddress(String address) {
+        put("address", address);
+    }
+
+    public String getDescription() {
+        return getString("description");
+    }
+
+    public void setDescription(String description) {
+        put("description", description);
+    }
+
     /* TODO
      * add in Relation to ParseObject Hashmap
      *

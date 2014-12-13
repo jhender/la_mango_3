@@ -22,7 +22,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
             android:name=".MainTabActivity"
             android:label="@string/title_activity_main_tab" >
@@ -32,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -59,7 +57,6 @@
                 android:name="com.parse.ui.ParseLoginActivity.PARSE_LOGIN_EMAIL_AS_USERNAME"
                 android:value="true" />
         </activity>
-
 
         <service android:name="com.parse.PushService" />
 
@@ -89,7 +86,14 @@
             </intent-filter>
         </receiver>
 
-
+        <activity
+            android:name=".SecretPanelActivity"
+            android:label="@string/title_activity_secret_panel"
+            android:parentActivityName=".MainTabActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.lookingaround.mango.MainTabActivity" />
+        </activity>
     </application>
 
 </manifest>

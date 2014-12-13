@@ -38,10 +38,11 @@
     <string name="not_logged_in">Not logged in</string>
     <string name="logged_in">Welcome, %1$s</string>
 
-    <!--Tab Activity-->
+    <!-- Tab Activity -->
     <string name="title_activity_main_tab">Hashmap</string>
     <string name="title_section1">Popular</string>
     <string name="title_section2">Map</string>
     <string name="title_section3">-</string>
+    <string name="title_activity_secret_panel">SecretPanelActivity</string>
 
 </resources>
