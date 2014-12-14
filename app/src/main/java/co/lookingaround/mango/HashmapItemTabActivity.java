@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -39,7 +40,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
     private static String selectedHashmap = "Hashmap";
     private static String selectedHashmapId = "id";
-    Hashmap hashmap;
+    Hashmap hashmap1;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -95,12 +96,34 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                             .setTabListener(this));
         }
 
+        // get Intent
         selectedHashmapId = getIntent().getStringExtra("currentSelectedHashmapId");
         Toast.makeText(getApplicationContext(), "Intent reads as: " + selectedHashmapId, Toast.LENGTH_SHORT).show();
         Log.i("hmitactivity", "Intent reads as: " + selectedHashmapId);
 
-    }
+        // retrieve hashmap from local
+        ParseQuery<Hashmap> query1 = ParseQuery.getQuery("Hashmap");
+        query1.fromLocalDatastore();
+        query1.getInBackground(selectedHashmapId, new GetCallback<Hashmap>() {
+                    public void done(Hashmap object, ParseException e) {
+                        if (e == null) {
+                            hashmap1 = object;
+                            selectedHashmap = hashmap1.getTitle();
+                            Log.i("hmitactivity", "selectedHashmapId: " + selectedHashmap);
 
+                            // set activity title
+                            setTitle(selectedHashmap);
+                        } else {
+                            Log.e("hmitactivity", "error");
+                        }
+                    }
+                }
+        );
+
+        // retrieve hashmap items, put into local.
+
+
+    }
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
