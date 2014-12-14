@@ -288,19 +288,24 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             Log.i("hmitactivity","3 attempt retrieve array" + hashmapItemArrayList);
 
             if (hashmapItemArrayList != null) {
-//                for (HashmapItem hm : hashmapItemArrayList) {
                 Log.i("hmitactivity","size: " + hashmapItemArrayList.size());
                 for (int i = 0; i < hashmapItemArrayList.size(); i++) {
 
                     HashmapItem hm = hashmapItemArrayList.get(i);
+                    if (!hm.isDataAvailable()) {
+                        //TODO super error
+//                        hm.fetch();
+                        try {
+                            hm.fetch();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     Log.i("hmitactivity", "4 get first item " + hm.getTitle());
                     Log.i("hmitactivity", "4 get first item " + hm.getAddress());
 
                     customParseArrayAdapter.add(hm);
                 }
-//                HashmapItem hmitem1 = (HashmapItem) hashmapItemArrayList.get(0);
-
-
             }
         }
 
