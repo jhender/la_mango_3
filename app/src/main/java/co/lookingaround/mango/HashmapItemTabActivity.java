@@ -44,7 +44,6 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
     private static String selectedHashmap = "Hashmap";
     private static String selectedHashmapId = "id";
     static Hashmap hashmap1;
-    ArrayList<ParseObject> hashmapItemArrayList;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -103,14 +102,12 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         // get Intent
         selectedHashmapId = getIntent().getStringExtra("currentSelectedHashmapId");
         Toast.makeText(getApplicationContext(), "Intent reads as: " + selectedHashmapId, Toast.LENGTH_SHORT).show();
-        Log.i("hmitactivity", "Intent reads as: " + selectedHashmapId);
+        Log.i("hmitactivity", "1 Intent reads as: " + selectedHashmapId);
 
         // retrieve hashmap from local
 //        retrieveHashmap();
 
     }
-
-
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -165,15 +162,18 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             switch(position) {
                 case 0:
                     return new HashmapItemFragment();
-                case 1:
-                    return new OldHashmapItemFragment();
+//                case 1:
+//                    return new OldHashmapItemFragment();
+//                case 2:
+//                    return new ItemFragment();
             }
-            return null;        }
+            return null;
+        }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 1;
         }
 
         @Override
@@ -225,24 +225,21 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
     /*
      * This fragment gets ArrayList to display
      */
-    public static class HashmapItemFragment extends ListFragment {
+    public static class HashmapItemFragment extends Fragment {
         private LayoutInflater inflater;
         private CustomParseArrayAdapter customParseArrayAdapter;
-
-        ArrayList<ParseObject> hashmapItemArrayList;
+        private static ArrayList<HashmapItem> hashmapItemArrayList = new ArrayList<>();
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            customParseArrayAdapter = new CustomParseArrayAdapter(getActivity());
+            retrieveHashmap();
+//            setListAdapter(customParseArrayAdapter);
+
+            customParseArrayAdapter = new CustomParseArrayAdapter(getActivity().getBaseContext(), hashmapItemArrayList);
 //            setListAdapter(customParseItemAdapter);
 //            setListShown(false);
-            setListAdapter(customParseArrayAdapter);
-
-            // Retrieve hashmaps and items here.
-            // TODO this method call is slow and inBackground, ends up the array adapter is empty when loaded into View. hOW?
-            retrieveHashmap();
 
         }
 
@@ -254,7 +251,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                             if (e == null) {
                                 hashmap1 = object;
                                 selectedHashmap = hashmap1.getTitle();
-                                Log.i("hmitactivity", "selectedHashmapId: " + selectedHashmap);
+                                Log.i("hmitactivity", "2 selectedHashmapId: " + selectedHashmap);
 
                                 // set activity title
                                 getActivity().setTitle(selectedHashmap);
@@ -263,7 +260,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                                 retrieveHashmapItems();
 
                             } else {
-                                Log.e("hmitactivity", "error");
+                                Log.e("2 hmitactivity", "error");
                             }
                         }
                     }
@@ -273,42 +270,57 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         private void retrieveHashmapItems(){
 
             //Load the related items Array
-            hashmapItemArrayList = (ArrayList<ParseObject>) hashmap1.get("hashmapItemList");
-            Log.i("hmitactivity","attempt retrieve array" + hashmapItemArrayList);
+            hashmapItemArrayList = (ArrayList<HashmapItem>) hashmap1.get("hashmapItemList");
+            Log.i("hmitactivity","3 attempt retrieve array" + hashmapItemArrayList);
 
             if (hashmapItemArrayList != null) {
-                HashmapItem hmitem1 = (HashmapItem) hashmapItemArrayList.get(0);
-                Log.i("hmitactivity", "get first item " + hmitem1.getTitle());
-                Log.i("hmitactivity", "get first item " + hmitem1.getAddress());
+//                for (HashmapItem hm : hashmapItemArrayList) {
+                Log.i("hmitactivity","size: " + hashmapItemArrayList.size());
+                for (int i = 0; i < hashmapItemArrayList.size(); i++) {
+
+                    HashmapItem hm = hashmapItemArrayList.get(i);
+                    Log.i("hmitactivity", "4 get first item " + hm.getTitle());
+                    Log.i("hmitactivity", "4 get first item " + hm.getAddress());
+
+                    customParseArrayAdapter.add(hm);
+                }
+//                HashmapItem hmitem1 = (HashmapItem) hashmapItemArrayList.get(0);
+
 
             }
         }
 
         private class CustomParseArrayAdapter extends ArrayAdapter<HashmapItem> {
-            private Context mContext;
-            private List<HashmapItem> mItems;
+//            private Context mContext;
+//            private ArrayList<HashmapItem> mItems;
 
-            public CustomParseArrayAdapter(Context context, List<HashmapItem> objects){
+
+            public CustomParseArrayAdapter(Context context, ArrayList<HashmapItem> objects){
                 super(context, R.layout.list_item_hashmapitem, objects);
-                this.mContext = context;
-                this.mItems = objects;
+//                this.mContext = context;
+//                this.mItems = objects;
+                Log.i("hmitactivity", "6 custom array adapter start");
             }
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                View itemView = convertView;
+                HashmapItem currentHMI = hashmapItemArrayList.get(position);
+
                 ViewHolder holder;
-                if (itemView == null) {
-                    inflater = getActivity().getLayoutInflater();
+                if (convertView == null) {
                     holder = new ViewHolder();
-                    holder.hmiTitle = (TextView) itemView.findViewById(R.id.hashmapitem_title);
-                    holder.hmiDescription = (TextView) itemView.findViewById(R.id.hashmapitem_description);
-                    holder.hmiAddress = (TextView) itemView.findViewById(R.id.hashmapitem_address);
-                    itemView.setTag(holder);
+
+                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    convertView = inflater.inflate(R.layout.list_item_hashmapitem, parent, false);
+
+//                    inflater = getActivity().getLayoutInflater();
+                    holder.hmiTitle = (TextView) convertView.findViewById(R.id.hashmapitem_title);
+                    holder.hmiDescription = (TextView) convertView.findViewById(R.id.hashmapitem_description);
+                    holder.hmiAddress = (TextView) convertView.findViewById(R.id.hashmapitem_address);
+                    convertView.setTag(holder);
                 } else {
-                    holder = (ViewHolder) itemView.getTag();
+                    holder = (ViewHolder) convertView.getTag();
                 }
-                HashmapItem currentHMI = (HashmapItem) hashmapItemArrayList.get(position);
 
                 TextView titleText = holder.hmiTitle;
                 TextView descriptionText = holder.hmiDescription;
@@ -317,7 +329,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                 descriptionText.setText(currentHMI.getDescription());
                 addressText.setText(currentHMI.getAddress());
 
-                return itemView;
+                return convertView;
             }
         }
 
@@ -331,11 +343,18 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_hashmap_item_tab, container, false);
 //            ListView hmitemListView = (ListView) rootView.findViewById(R);
-            LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
+//            LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
 //            hmitemListView.setEmptyView(emptyView);
 //            hmitemListView.setAdapter();
 
-            setListAdapter(customParseArrayAdapter);
+            ListView hmitemListView = (ListView) rootView.findViewById(R.id.list_view3);
+            LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
+            hmitemListView.setEmptyView(emptyView);
+            hmitemListView.setAdapter(customParseArrayAdapter);
+
+            Log.i("hmitactivity", "5 " + customParseArrayAdapter.isEmpty());
+
+//            setListAdapter(customParseArrayAdapter);
 //            customParseArrayAdapter.notifyDataSetChanged();
             //onItemClickListener
             return rootView;
@@ -371,7 +390,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 //            popularListAdapter = new ParseQueryAdapter<>(getActivity(), factory);
             hashmapItemListAdapter = new hashmapItemListAdapter(getActivity(), factory);
 
-            Log.i("hashmapitemListActivity", "on activity created" + hashmapItemListAdapter);
+//            Log.i("hashmapitemListActivity", "on activity created" + hashmapItemListAdapter);
         }
 
         private class hashmapItemListAdapter extends ParseQueryAdapter<HashmapItem> {
@@ -427,23 +446,23 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                                         if (e == null) {
 //                                            if (!isFinishing()) {
                                             hashmapItemListAdapter.loadObjects();
-                                            Log.i(
-                                                    "hmitemListactivity", "retrieved, loadobjects"
-                                            );
+//                                            Log.i(
+//                                                    "hmitemListactivity", "retrieved, loadobjects"
+//                                            );
 
-                                            Log.i("hmitemListactivity", "after loadobjects" + hashmapItemListAdapter);
+//                                            Log.i("hmitemListactivity", "after loadobjects" + hashmapItemListAdapter);
 
 //                                            }
                                         } else {
-                                            Log.i("hmitemListactivity",
-                                                    "Error pinning hashmaps: " + e.getMessage());
+//                                            Log.i("hmitemListactivity",
+//                                                    "Error pinning hashmaps: " + e.getMessage());
                                         }
                                     }
                                 });
                     } else {
-                        Log.i("popularListActivity",
-                                "loadFromParse: Error finding pinned hashmaps: "
-                                        + e.getMessage());
+//                        Log.i("popularListActivity",
+//                                "loadFromParse: Error finding pinned hashmaps: "
+//                                        + e.getMessage());
                     }
                 }
             });
@@ -470,7 +489,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                 }
             });
 
-            Log.i("hashmapitemListActivity", "return view" + hashmapItemListAdapter);
+//            Log.i("hashmapitemListActivity", "return view" + hashmapItemListAdapter);
             return rootView;
 
 
