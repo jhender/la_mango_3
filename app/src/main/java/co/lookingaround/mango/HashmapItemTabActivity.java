@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,7 +43,8 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
     private static String selectedHashmap = "Hashmap";
     private static String selectedHashmapId = "id";
-    Hashmap hashmap1;
+    static Hashmap hashmap1;
+    ArrayList<ParseObject> hashmapItemArrayList;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -102,28 +106,11 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         Log.i("hmitactivity", "Intent reads as: " + selectedHashmapId);
 
         // retrieve hashmap from local
-        ParseQuery<Hashmap> query1 = ParseQuery.getQuery("Hashmap");
-        query1.fromLocalDatastore();
-        query1.getInBackground(selectedHashmapId, new GetCallback<Hashmap>() {
-                    public void done(Hashmap object, ParseException e) {
-                        if (e == null) {
-                            hashmap1 = object;
-                            selectedHashmap = hashmap1.getTitle();
-                            Log.i("hmitactivity", "selectedHashmapId: " + selectedHashmap);
-
-                            // set activity title
-                            setTitle(selectedHashmap);
-                        } else {
-                            Log.e("hmitactivity", "error");
-                        }
-                    }
-                }
-        );
-
-        // retrieve hashmap items, put into local.
-
+//        retrieveHashmap();
 
     }
+
+
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -179,7 +166,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                 case 0:
                     return new HashmapItemFragment();
                 case 1:
-                    return new HashmapItemFragment();
+                    return new OldHashmapItemFragment();
             }
             return null;        }
 
@@ -235,7 +222,130 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         }
     }
 
-    public static class HashmapItemFragment extends Fragment {
+    /*
+     * This fragment gets ArrayList to display
+     */
+    public static class HashmapItemFragment extends ListFragment {
+        private LayoutInflater inflater;
+        private CustomParseArrayAdapter customParseArrayAdapter;
+
+        ArrayList<ParseObject> hashmapItemArrayList;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            customParseArrayAdapter = new CustomParseArrayAdapter(getActivity());
+//            setListAdapter(customParseItemAdapter);
+//            setListShown(false);
+            setListAdapter(customParseArrayAdapter);
+
+            // Retrieve hashmaps and items here.
+            // TODO this method call is slow and inBackground, ends up the array adapter is empty when loaded into View. hOW?
+            retrieveHashmap();
+
+        }
+
+        private void retrieveHashmap(){
+            ParseQuery<Hashmap> query1 = ParseQuery.getQuery("Hashmap");
+            query1.fromLocalDatastore();
+            query1.getInBackground(selectedHashmapId, new GetCallback<Hashmap>() {
+                        public void done(Hashmap object, ParseException e) {
+                            if (e == null) {
+                                hashmap1 = object;
+                                selectedHashmap = hashmap1.getTitle();
+                                Log.i("hmitactivity", "selectedHashmapId: " + selectedHashmap);
+
+                                // set activity title
+                                getActivity().setTitle(selectedHashmap);
+
+                                // retrieve hashmap items, put into local.
+                                retrieveHashmapItems();
+
+                            } else {
+                                Log.e("hmitactivity", "error");
+                            }
+                        }
+                    }
+            );
+        }
+
+        private void retrieveHashmapItems(){
+
+            //Load the related items Array
+            hashmapItemArrayList = (ArrayList<ParseObject>) hashmap1.get("hashmapItemList");
+            Log.i("hmitactivity","attempt retrieve array" + hashmapItemArrayList);
+
+            if (hashmapItemArrayList != null) {
+                HashmapItem hmitem1 = (HashmapItem) hashmapItemArrayList.get(0);
+                Log.i("hmitactivity", "get first item " + hmitem1.getTitle());
+                Log.i("hmitactivity", "get first item " + hmitem1.getAddress());
+
+            }
+        }
+
+        private class CustomParseArrayAdapter extends ArrayAdapter<HashmapItem> {
+            private Context mContext;
+            private List<HashmapItem> mItems;
+
+            public CustomParseArrayAdapter(Context context, List<HashmapItem> objects){
+                super(context, R.layout.list_item_hashmapitem, objects);
+                this.mContext = context;
+                this.mItems = objects;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View itemView = convertView;
+                ViewHolder holder;
+                if (itemView == null) {
+                    inflater = getActivity().getLayoutInflater();
+                    holder = new ViewHolder();
+                    holder.hmiTitle = (TextView) itemView.findViewById(R.id.hashmapitem_title);
+                    holder.hmiDescription = (TextView) itemView.findViewById(R.id.hashmapitem_description);
+                    holder.hmiAddress = (TextView) itemView.findViewById(R.id.hashmapitem_address);
+                    itemView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) itemView.getTag();
+                }
+                HashmapItem currentHMI = (HashmapItem) hashmapItemArrayList.get(position);
+
+                TextView titleText = holder.hmiTitle;
+                TextView descriptionText = holder.hmiDescription;
+                TextView addressText = holder.hmiAddress;
+                titleText.setText(currentHMI.getTitle());
+                descriptionText.setText(currentHMI.getDescription());
+                addressText.setText(currentHMI.getAddress());
+
+                return itemView;
+            }
+        }
+
+        private static class ViewHolder {
+            TextView hmiTitle;
+            TextView hmiDescription;
+            TextView hmiAddress;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_hashmap_item_tab, container, false);
+//            ListView hmitemListView = (ListView) rootView.findViewById(R);
+            LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
+//            hmitemListView.setEmptyView(emptyView);
+//            hmitemListView.setAdapter();
+
+            setListAdapter(customParseArrayAdapter);
+//            customParseArrayAdapter.notifyDataSetChanged();
+            //onItemClickListener
+            return rootView;
+        }
+    }
+
+    /* This fragment gets raw Items from Parse.
+     *
+     */
+    public static class OldHashmapItemFragment extends Fragment {
 
         private ParseQueryAdapter<HashmapItem> hashmapItemListAdapter;
         private LayoutInflater inflater;
@@ -275,20 +385,25 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                 ViewHolder holder;
                 if (view == null) {
                     inflater = getActivity().getLayoutInflater();
-                    view = inflater.inflate(R.layout.list_item_hashmap, parent, false);
+                    view = inflater.inflate(R.layout.list_item_hashmapitem, parent, false);
                     holder = new ViewHolder();
-                    holder.hashmapTitle = (TextView) view
-                            .findViewById(R.id.hashmap_title);
+                    holder.hashmapTitle = (TextView) view.findViewById(R.id.hashmapitem_title);
+                    holder.hmiDescription = (TextView) view.findViewById(R.id.hashmapitem_description);
+                    holder.hmiAddress = (TextView) view.findViewById(R.id.hashmapitem_address);
                     view.setTag(holder);
                 } else {
                     holder = (ViewHolder) view.getTag();
                 }
-                TextView hashmapTitle = holder.hashmapTitle;
-                hashmapTitle.setText(hashmapitem.getTitle());
+                TextView hmiDescription = holder.hmiDescription;
+                TextView hmiTitle = holder.hashmapTitle;
+                TextView hmiAddress = holder.hmiAddress;
+                hmiTitle.setText(hashmapitem.getTitle());
+                hmiDescription.setText(hashmapitem.getDescription());
+                hmiAddress.setText(hashmapitem.getAddress());
                 if (hashmapitem.isDraft()) {
-                    hashmapTitle.setTypeface(null, Typeface.ITALIC);
+                    hmiTitle.setTypeface(null, Typeface.ITALIC);
                 } else {
-                    hashmapTitle.setTypeface(null, Typeface.NORMAL);
+                    hmiTitle.setTypeface(null, Typeface.NORMAL);
                 }
                 return view;
             }
@@ -296,6 +411,8 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
         private static class ViewHolder {
             TextView hashmapTitle;
+            TextView hmiDescription;
+            TextView hmiAddress;
         }
 
         private void loadFromParse() {
@@ -352,16 +469,6 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
                 }
             });
-
-
-            //Load the related items
-//            ArrayList<ParseObject> hashmapItemArrayList = (ArrayList<ParseObject>) currentSelectedHashmap.get("hashmapItemList");
-//            Log.i("MainTabActivity","attempt retrieve array" + hashmapItemArrayList);
-//
-//            if (hashmapItemArrayList != null) {
-//                HashmapItem hmitem1 = (HashmapItem) hashmapItemArrayList.get(0);
-//                Log.i("MainTabActivity", "get first item " + hmitem1.getTitle());
-//            }
 
             Log.i("hashmapitemListActivity", "return view" + hashmapItemListAdapter);
             return rootView;

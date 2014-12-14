@@ -213,7 +213,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 //            popularListAdapter = new ParseQueryAdapter<>(getActivity(), factory);
             popularListAdapter = new popularListAdapter(getActivity(), factory);
 
-            Log.i("popularListActivity", "on activity created" + popularListAdapter);
+//            Log.i("popularListActivity", "on activity created" + popularListAdapter);
         }
 
         private class popularListAdapter extends ParseQueryAdapter<Hashmap> {
@@ -262,16 +262,11 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                                         if (e == null) {
 //                                            if (!isFinishing()) {
                                                 popularListAdapter.loadObjects();
-                                            Log.i(
-                                                    "popularListactivity", "retrieved, loadobjects"
-                                             );
-
-                                            Log.i("popularListActivity", "after loadobjects" + popularListAdapter);
+//                                            Log.i("popularListActivity", "after loadobjects" + popularListAdapter);
 
 //                                            }
                                         } else {
-                                            Log.i("popularListActivity",
-                                                    "Error pinning hashmaps: " + e.getMessage());
+                                            Log.e("popularListActivity","Error pinning hashmaps: " + e.getMessage());
                                         }
                                     }
                                 });
@@ -302,7 +297,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                     currentSelectedHashmapTitle = hashmap.getTitle();
                     currentSelectedHashmapId = hashmap.getObjectId();
                     currentSelectedHashmap = hashmap;
-                    Toast.makeText(getActivity(), "Item clicked " + currentSelectedHashmapTitle, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "Item clicked " + currentSelectedHashmapTitle, Toast.LENGTH_SHORT).show();
 
                     //Todo pass intent
                     Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
@@ -312,7 +307,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                 }
             });
 
-            Log.i("popularListActivity", "return view" + popularListAdapter);
+//            Log.i("popularListActivity", "return view" + popularListAdapter);
             return rootView;
         }
     }

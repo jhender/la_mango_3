@@ -34,7 +34,7 @@
     <string name="action_logout">Log Out</string>
     <string name="action_login">Log In</string>
     <string name="login_title">Please log in or sign up to sync your data to your account.</string>
-    <string name="no_items">No items, click + on the toolbar to started adding datas.</string>
+    <string name="no_items">No items.</string>
     <string name="not_logged_in">Not logged in</string>
     <string name="logged_in">Welcome, %1$s</string>
 
