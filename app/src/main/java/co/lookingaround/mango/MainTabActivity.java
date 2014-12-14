@@ -315,8 +315,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                     // Go to next Fragment
 //                    jumpToSection2();
 
-                    //Todo remove test.
-                    Intent intent = new Intent(view.getContext(), SecretPanelActivity.class);
+                    //Todo pass intent
+                    Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
                     startActivity(intent);
 
                 }
@@ -498,11 +498,6 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             return rootView;
         }
     }
-
-    private void jumpToSection2() {
-        mViewPager.setCurrentItem(2);
-    }
-
 
 
 }
