@@ -297,9 +297,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                     currentSelectedHashmapTitle = hashmap.getTitle();
                     currentSelectedHashmapId = hashmap.getObjectId();
                     currentSelectedHashmap = hashmap;
-//                    Toast.makeText(getActivity(), "Item clicked " + currentSelectedHashmapTitle, Toast.LENGTH_SHORT).show();
 
-                    //Todo pass intent
                     Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
                     intent.putExtra("currentSelectedHashmapId", currentSelectedHashmapId);
                     startActivity(intent);

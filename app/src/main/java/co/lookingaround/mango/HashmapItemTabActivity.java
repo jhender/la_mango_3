@@ -106,24 +106,15 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         // get Intent
         String string = getIntent().getStringExtra("currentSelectedHashmapId");
 
+        // delete previous hashmap contents if new ID. Maybe I just should always delete it since it sometimes causes problems.
         if (string.equals(selectedHashmapId)) {
             newHashmap = false;
         } else {
             newHashmap = true;
             selectedHashmapId = string;
-//            if (hashmapItemArrayList != null) {
                 hashmapItemArrayList = new ArrayList<>();
-//            }
         }
-
-
-        Log.i("hmitactivity", "0.1 seelectedhmID " + selectedHashmapId);
-
-        Toast.makeText(getApplicationContext(), "Intent reads as: " + selectedHashmapId, Toast.LENGTH_SHORT).show();
-        Log.i("hmitactivity", "1 Intent reads as: " + selectedHashmapId);
-
-        // retrieve hashmap from local
-//        retrieveHashmap();
+        Log.i("hmitactivity", "1 seelectedhmID " + selectedHashmapId);
 
     }
 
