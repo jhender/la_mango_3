@@ -1,6 +1,5 @@
 package co.lookingaround.mango;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -95,7 +94,6 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -160,19 +158,15 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                 case 0:
                     return new PopularFragment();
                 case 1:
-//                    return PlaceholderFragment.newInstance(position);
-                    return new HashmapItemFragment();
-                case 2:
-                    return PlaceholderFragment.newInstance(position);
-//                    return new PopularFragment();
+                    return new PopularFragment();
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 2 total pages.
+            return 2;
         }
 
         @Override
@@ -183,8 +177,6 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
         }
@@ -312,11 +304,9 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                     currentSelectedHashmap = hashmap;
                     Toast.makeText(getActivity(), "Item clicked " + currentSelectedHashmapTitle, Toast.LENGTH_SHORT).show();
 
-                    // Go to next Fragment
-//                    jumpToSection2();
-
                     //Todo pass intent
                     Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
+                    intent.putExtra("currentSelectedHashmapId", currentSelectedHashmapId);
                     startActivity(intent);
 
                 }
@@ -327,177 +317,38 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         }
     }
 
-    /**
-     * Show the list of Popular Hashmaps
-     * Make Clickable to jump to Map Fragment
-     */
-    public static class HashmapItemFragment extends Fragment {
-
-        private ParseQueryAdapter<HashmapItem> hashmapItemListAdapter;
-        private LayoutInflater inflater;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            // Set up the Parse query to use in the adapter
-            ParseQueryAdapter.QueryFactory<HashmapItem> factory = new ParseQueryAdapter.QueryFactory<HashmapItem>() {
-                public ParseQuery<HashmapItem> create() {
-                    ParseQuery<HashmapItem> query = HashmapItem.getQuery();
-                    query.orderByDescending("createdAt");
-                    query.fromLocalDatastore();
-                    return query;
-                }
-            };
-
-
-
-            loadFromParse();
-
-//            popularListAdapter = new ParseQueryAdapter<>(getActivity(), factory);
-            hashmapItemListAdapter = new hashmapItemListAdapter(getActivity(), factory);
-
-            Log.i("hashmapitemListActivity", "on activity created" + hashmapItemListAdapter);
-        }
-
-        private class hashmapItemListAdapter extends ParseQueryAdapter<HashmapItem> {
-
-            public hashmapItemListAdapter(Context context, QueryFactory<HashmapItem> queryFactory) {
-                super(context, queryFactory);
-            }
-
-            @Override
-            public View getItemView(HashmapItem hashmapitem, View view, ViewGroup parent) {
-                ViewHolder holder;
-                if (view == null) {
-                    inflater = getActivity().getLayoutInflater();
-                    view = inflater.inflate(R.layout.list_item_hashmap, parent, false);
-                    holder = new ViewHolder();
-                    holder.hashmapTitle = (TextView) view
-                            .findViewById(R.id.hashmap_title);
-                    view.setTag(holder);
-                } else {
-                    holder = (ViewHolder) view.getTag();
-                }
-                TextView hashmapTitle = holder.hashmapTitle;
-                hashmapTitle.setText(hashmapitem.getTitle());
-                if (hashmapitem.isDraft()) {
-                    hashmapTitle.setTypeface(null, Typeface.ITALIC);
-                } else {
-                    hashmapTitle.setTypeface(null, Typeface.NORMAL);
-                }
-                return view;
-            }
-        }
-
-        private static class ViewHolder {
-            TextView hashmapTitle;
-        }
-
-        private void loadFromParse() {
-            ParseQuery<HashmapItem> query = HashmapItem.getQuery();
-//            query.whereEqualTo("isDraft", false);
-            query.findInBackground(new FindCallback<HashmapItem>() {
-                public void done(List<HashmapItem> hashmapitems, ParseException e) {
-                    if (e == null) {
-                        ParseObject.pinAllInBackground( hashmapitems,
-                                new SaveCallback() {
-                                    public void done(ParseException e) {
-                                        if (e == null) {
-//                                            if (!isFinishing()) {
-                                            hashmapItemListAdapter.loadObjects();
-                                            Log.i(
-                                                    "hmitemListactivity", "retrieved, loadobjects"
-                                            );
-
-                                            Log.i("hmitemListactivity", "after loadobjects" + hashmapItemListAdapter);
-
-//                                            }
-                                        } else {
-                                            Log.i("hmitemListactivity",
-                                                    "Error pinning hashmaps: " + e.getMessage());
-                                        }
-                                    }
-                                });
-                    } else {
-                        Log.i("popularListActivity",
-                                "loadFromParse: Error finding pinned hashmaps: "
-                                        + e.getMessage());
-                    }
-                }
-            });
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_tab_hashmapitemlist, container, false);
-
-            ListView hmitemListView = (ListView) rootView.findViewById(R.id.hashmap_item_list_view);
-            LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
-            hmitemListView.setEmptyView(emptyView);
-            hmitemListView.setAdapter(hashmapItemListAdapter);
-
-            hmitemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-
-                    HashmapItem hashmapitem = hashmapItemListAdapter.getItem(position);
-                    currentSelectedHashmapTitle = hashmapitem.getTitle();
-                    Toast.makeText(getActivity(), "Item clicked " + currentSelectedHashmapTitle, Toast.LENGTH_SHORT).show();
-
-                }
-            });
-
-
-            //Load the related items
-            ArrayList<ParseObject> hashmapItemArrayList = (ArrayList<ParseObject>) currentSelectedHashmap.get("hashmapItemList");
-            Log.i("MainTabActivity","attempt retrieve array" + hashmapItemArrayList);
-
-            if (hashmapItemArrayList != null) {
-                HashmapItem hmitem1 = (HashmapItem) hashmapItemArrayList.get(0);
-                Log.i("MainTabActivity", "get first item " + hmitem1.getTitle());
-            }
-
-            Log.i("hashmapitemListActivity", "return view" + hashmapItemListAdapter);
-            return rootView;
-
-
-        }
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_tab, container, false);
-            return rootView;
-        }
-    }
+//    /**
+//     * A placeholder fragment containing a simple view.
+//     */
+//    public static class PlaceholderFragment extends Fragment {
+//        /**
+//         * The fragment argument representing the section number for this
+//         * fragment.
+//         */
+//        private static final String ARG_SECTION_NUMBER = "section_number";
+//
+//        /**
+//         * Returns a new instance of this fragment for the given section
+//         * number.
+//         */
+//        public static PlaceholderFragment newInstance(int sectionNumber) {
+//            PlaceholderFragment fragment = new PlaceholderFragment();
+//            Bundle args = new Bundle();
+//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+//            fragment.setArguments(args);
+//            return fragment;
+//        }
+//
+//        public PlaceholderFragment() {
+//        }
+//
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                                 Bundle savedInstanceState) {
+//            View rootView = inflater.inflate(R.layout.fragment_main_tab, container, false);
+//            return rootView;
+//        }
+//    }
 
 
 }
