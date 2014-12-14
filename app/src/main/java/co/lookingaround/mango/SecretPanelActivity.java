@@ -85,21 +85,22 @@ public class SecretPanelActivity extends ActionBarActivity {
         query.getInBackground("IMrgX3KPxo", new GetCallback<Hashmap>() {
                     public void done(final Hashmap hashmap1, ParseException e) {
                         if (e == null) {
-//                            objectWasRetrievedSuccessfully(object);
 
 //                            hashmap1 = object;
                             Log.i("retrieve hashmap", "retrieved");
 
+//                            ArrayList<HashmapItem> HashmapItemsArray = new ArrayList<>();
+
+                            final ArrayList<HashmapItem> HashmapItemsArray = (ArrayList<HashmapItem>) hashmap1.get("hashmapItemList");
 
                             //Get subobjects
                             ParseQuery<HashmapItem> query2 = ParseQuery.getQuery("HashmapItem");
-                            query2.getInBackground("hQTfvXur56", new GetCallback<HashmapItem>() {
+                            query2.getInBackground("mRi03NSMU7", new GetCallback<HashmapItem>() {
                                 public void done(HashmapItem hashmapItem, ParseException e) {
                                     if (e == null) {
                                         Log.i("retrieve hashmapitem", "retrieved");
 
                                         //Build array
-                                        ArrayList<ParseObject> HashmapItemsArray = new ArrayList<>();
                                         HashmapItemsArray.add(hashmapItem);
 
                                         //Link to Main Object
@@ -107,12 +108,13 @@ public class SecretPanelActivity extends ActionBarActivity {
                                         hashmap1.saveEventually();
                                         Log.i("retrieve hashmap", "end");
 
-
                                     } else {
                                         Log.i("retrieve hashmapitem", "failed");
                                     }
                                 }
                             });
+
+
 
 
 

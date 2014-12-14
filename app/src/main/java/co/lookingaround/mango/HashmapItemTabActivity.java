@@ -41,9 +41,11 @@ import com.parse.SaveCallback;
 
 public class HashmapItemTabActivity extends ActionBarActivity implements ActionBar.TabListener {
 
+    private static boolean newHashmap = false;
     private static String selectedHashmap = "Hashmap";
     private static String selectedHashmapId = "id";
     static Hashmap hashmap1;
+    private static ArrayList<HashmapItem> hashmapItemArrayList = new ArrayList<>();
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -99,8 +101,24 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                             .setTabListener(this));
         }
 
+        Log.i("hmitactivity", "0 seelectedhmID " + selectedHashmapId);
+
         // get Intent
-        selectedHashmapId = getIntent().getStringExtra("currentSelectedHashmapId");
+        String string = getIntent().getStringExtra("currentSelectedHashmapId");
+
+        if (string.equals(selectedHashmapId)) {
+            newHashmap = false;
+        } else {
+            newHashmap = true;
+            selectedHashmapId = string;
+//            if (hashmapItemArrayList != null) {
+                hashmapItemArrayList = new ArrayList<>();
+//            }
+        }
+
+
+        Log.i("hmitactivity", "0.1 seelectedhmID " + selectedHashmapId);
+
         Toast.makeText(getApplicationContext(), "Intent reads as: " + selectedHashmapId, Toast.LENGTH_SHORT).show();
         Log.i("hmitactivity", "1 Intent reads as: " + selectedHashmapId);
 
@@ -228,11 +246,13 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
     public static class HashmapItemFragment extends Fragment {
         private LayoutInflater inflater;
         private CustomParseArrayAdapter customParseArrayAdapter;
-        private static ArrayList<HashmapItem> hashmapItemArrayList = new ArrayList<>();
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+            Log.i("hmitactivity", "hashmaparray is empty?: " + hashmapItemArrayList.isEmpty());
+//            Log.i("hmitactivity", "custom adapter is empty?: " + customParseArrayAdapter.i);
 
             retrieveHashmap();
 //            setListAdapter(customParseArrayAdapter);
@@ -240,6 +260,9 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             customParseArrayAdapter = new CustomParseArrayAdapter(getActivity().getBaseContext(), hashmapItemArrayList);
 //            setListAdapter(customParseItemAdapter);
 //            setListShown(false);
+            Log.i("hmitactivity", "hashmaparray is empty?: " + hashmapItemArrayList.isEmpty());
+            Log.i("hmitactivity", "custom adapter is empty?: " + customParseArrayAdapter.isEmpty());
+
 
         }
 
