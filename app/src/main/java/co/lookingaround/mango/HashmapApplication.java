@@ -21,6 +21,10 @@ public class HashmapApplication extends Application {
 
 		// enable the Local Datastore
 		Parse.enableLocalDatastore(getApplicationContext());
+        // Enable Crash Reporting
+        // need to enable another sdk first
+//        ParseCrashReporting.enable(this);
+
 		Parse.initialize(this, "hfhVukFAkDhY90KnLStI5k8phj2gtmaau05nIo5w", "Awt2mfIyP6wXdtjRLSWuyXPngRaOsgKaFNPwljxc");
 		ParseUser.enableAutomaticUser();
 //		ParseACL defaultACL = new ParseACL();

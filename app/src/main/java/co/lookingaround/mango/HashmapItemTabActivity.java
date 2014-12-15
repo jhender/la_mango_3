@@ -41,7 +41,6 @@ import com.parse.SaveCallback;
 
 public class HashmapItemTabActivity extends ActionBarActivity implements ActionBar.TabListener {
 
-    private static boolean newHashmap = false;
     private static String selectedHashmap = "Hashmap";
     private static String selectedHashmapId = "id";
     static Hashmap hashmap1;
@@ -104,16 +103,20 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         Log.i("hmitactivity", "0 seelectedhmID " + selectedHashmapId);
 
         // get Intent
-        String string = getIntent().getStringExtra("currentSelectedHashmapId");
+        selectedHashmapId = getIntent().getStringExtra("currentSelectedHashmapId");
 
         // delete previous hashmap contents if new ID. Maybe I just should always delete it since it sometimes causes problems.
-        if (string.equals(selectedHashmapId)) {
-            newHashmap = false;
-        } else {
-            newHashmap = true;
-            selectedHashmapId = string;
-                hashmapItemArrayList = new ArrayList<>();
-        }
+//        if (string.equals(selectedHashmapId)) {
+//            newHashmap = false;
+//            hashmapItemArrayList = new ArrayList<>();
+//
+//        } else {
+//            newHashmap = true;
+//            selectedHashmapId = string;
+//            hashmapItemArrayList = new ArrayList<>();
+//        }
+        hashmapItemArrayList = new ArrayList<>();
+
         Log.i("hmitactivity", "1 seelectedhmID " + selectedHashmapId);
 
     }
@@ -259,7 +262,8 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
         private void retrieveHashmap(){
             ParseQuery<Hashmap> query1 = ParseQuery.getQuery("Hashmap");
-            query1.fromLocalDatastore();
+            query1.include("hashmapItemList");
+//            query1.fromLocalDatastore();
             query1.getInBackground(selectedHashmapId, new GetCallback<Hashmap>() {
                         public void done(Hashmap object, ParseException e) {
                             if (e == null) {
@@ -285,24 +289,32 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
             //Load the related items Array
             hashmapItemArrayList = (ArrayList<HashmapItem>) hashmap1.get("hashmapItemList");
-            Log.i("hmitactivity","3 attempt retrieve array" + hashmapItemArrayList);
+//            List<HashmapItem> aList = hashmap1.getList("hashmapItemList");
+
+            Log.i("hmitactivity","3 attempt retrieve array: " + hashmapItemArrayList);
+//            Log.i("hmitactivity","3 attempt retrieve list: " + aList);
+            Log.i("hmitactivity" , "4/ : " + hashmapItemArrayList.get(0).getTitle() );
 
             if (hashmapItemArrayList != null) {
                 Log.i("hmitactivity","size: " + hashmapItemArrayList.size());
                 for (int i = 0; i < hashmapItemArrayList.size(); i++) {
 
                     HashmapItem hm = hashmapItemArrayList.get(i);
-                    if (!hm.isDataAvailable()) {
-                        //TODO super error
-//                        hm.fetch();
-                        try {
-                            hm.fetch();
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    Log.i("hmitactivity", "4 get first item " + hm.getTitle());
-                    Log.i("hmitactivity", "4 get first item " + hm.getAddress());
+                    Log.i("hmitactivity" , "4/ hm: " + hm + " : " + hm.getTitle());
+//                    Log.i("hmitactivity" , "4/ list : " + aList.get(i).getTitle() + " : ");
+
+                    // if hm data is not yet prefetched, fetch now. It should ideally be already
+                    // fetched in the .include statement at the original hashmap query
+
+//                    if (!hm.isDataAvailable()) {
+//                        try {
+//                            hm.fetch();
+//                        } catch (ParseException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+
+                    Log.i("hmitactivity", "4/ get item: " + hm.getTitle());
 
                     customParseArrayAdapter.add(hm);
                 }

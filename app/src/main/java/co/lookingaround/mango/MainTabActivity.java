@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -92,6 +93,9 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
+
     }
 
     @Override
@@ -252,7 +256,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 
         private void loadFromParse() {
             ParseQuery<Hashmap> query = Hashmap.getQuery();
-//            query.whereEqualTo("isDraft", false);
+            query.whereEqualTo("isDraft", false);
+//            query.include("hashmapItemList");
             query.findInBackground(new FindCallback<Hashmap>() {
                 public void done(List<Hashmap> hashmaps, ParseException e) {
                     if (e == null) {
@@ -297,6 +302,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                     currentSelectedHashmapTitle = hashmap.getTitle();
                     currentSelectedHashmapId = hashmap.getObjectId();
                     currentSelectedHashmap = hashmap;
+
+                    ParseAnalytics.trackEventInBackground("Select a Hashmap");
 
                     Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
                     intent.putExtra("currentSelectedHashmapId", currentSelectedHashmapId);
