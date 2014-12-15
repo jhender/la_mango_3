@@ -303,7 +303,10 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                     currentSelectedHashmapId = hashmap.getObjectId();
                     currentSelectedHashmap = hashmap;
 
-                    ParseAnalytics.trackEventInBackground("Select a Hashmap");
+                    ParseAnalytics.trackEventInBackground("Select-Hashmap");
+
+                    hashmap.increment("open");
+                    hashmap.saveEventually();
 
                     Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
                     intent.putExtra("currentSelectedHashmapId", currentSelectedHashmapId);
