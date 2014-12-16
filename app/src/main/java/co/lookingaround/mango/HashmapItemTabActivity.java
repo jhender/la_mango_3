@@ -264,6 +264,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             ParseQuery<Hashmap> query1 = ParseQuery.getQuery("Hashmap");
             query1.include("hashmapItemList");
 //            query1.fromLocalDatastore();
+            //might want to re enable this. include here is too slow.
             query1.getInBackground(selectedHashmapId, new GetCallback<Hashmap>() {
                         public void done(Hashmap object, ParseException e) {
                             if (e == null) {
