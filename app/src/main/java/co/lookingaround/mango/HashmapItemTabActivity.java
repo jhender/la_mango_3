@@ -40,6 +40,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.parse.SaveCallback;
 
+/*
+ * not in active usage
+ */
 
 public class HashmapItemTabActivity extends ActionBarActivity implements ActionBar.TabListener {
 

@@ -28,17 +28,23 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
+import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.ui.ParseLoginBuilder;
 
 public class MainTabActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     private static String currentSelectedHashmapTitle = "Hashmap";
     private static String currentSelectedHashmapId = "id";
     private static Hashmap currentSelectedHashmap = new Hashmap();
+
+    private static final int LOGIN_ACTIVITY_CODE = 100;
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -99,6 +105,18 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        // this only shows log in or log out commmand
+        boolean realUser = !ParseAnonymousUtils.isLinked(ParseUser
+                .getCurrentUser());
+        menu.findItem(R.id.action_login).setVisible(!realUser);
+        menu.findItem(R.id.action_logout).setVisible(realUser);
+        return true;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_tab, menu);
@@ -121,6 +139,25 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             Intent intent = new Intent(this, SecretPanelActivity.class);
             startActivity(intent);
             return true;
+        }
+
+        if (item.getItemId() == R.id.action_logout) {
+            // Log out the current user
+            ParseUser.logOut();
+            // Create a new anonymous user
+            ParseAnonymousUtils.logIn(null);
+            // Update the logged in label info
+//            updateLoggedInInfo();
+            // Clear the view
+//            hashmapListAdapter.clear();
+            // Unpin all the current objects
+//            ParseObject
+//                    .unpinAllInBackground(HashmapApplication.HASHMAP_GROUP_NAME);
+        }
+
+        if (item.getItemId() == R.id.action_login) {
+            ParseLoginBuilder builder = new ParseLoginBuilder(this);
+            startActivityForResult(builder.build(), LOGIN_ACTIVITY_CODE);
         }
 
         return super.onOptionsItemSelected(item);
@@ -340,6 +377,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             ParseQueryAdapter.QueryFactory<Hashmap> factory = new ParseQueryAdapter.QueryFactory<Hashmap>() {
                 public ParseQuery<Hashmap> create() {
                     ParseQuery<Hashmap> query = Hashmap.getQuery();
+                    query.setLimit(5);
                     query.orderByDescending("open");
                     query.fromLocalDatastore();
                     return query;

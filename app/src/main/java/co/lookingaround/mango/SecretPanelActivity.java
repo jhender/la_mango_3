@@ -3,6 +3,7 @@ package co.lookingaround.mango;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -131,9 +132,12 @@ public class SecretPanelActivity extends ActionBarActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_secret_panel, menu);
+        return true;
+    }
+
 
 }
 
-//[{"__type":"Pointer","className":"HashmapItem","objectId":"iAnN0VmuKD"}]
-//[{"__type":"Pointer","className":"HashmapItem","objectId":"hQTfvXur56"}]
-//[{"__type":"Pointer","className":"HashmapItem","objectId":"AXfhaoEkm0"}]
