@@ -162,7 +162,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                 case 0:
                     return new PopularFragment();
                 case 1:
-                    return new PopularFragment();
+                    return new TopFragment();
             }
             return null;
         }
@@ -320,38 +320,140 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         }
     }
 
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_main_tab, container, false);
-//            return rootView;
-//        }
-//    }
+    /**
+     * Show the list of Popular Hashmaps
+     * Make Clickable to jump to Map Fragment
+     */
+    public static class TopFragment extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        private ParseQueryAdapter<Hashmap> popularListAdapter;
+        private LayoutInflater inflater;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            Bundle args = new Bundle();
+
+            // Set up the Parse query to use in the adapter
+            ParseQueryAdapter.QueryFactory<Hashmap> factory = new ParseQueryAdapter.QueryFactory<Hashmap>() {
+                public ParseQuery<Hashmap> create() {
+                    ParseQuery<Hashmap> query = Hashmap.getQuery();
+                    query.orderByDescending("open");
+                    query.fromLocalDatastore();
+                    return query;
+                }
+            };
+
+            loadFromParse();
+
+//            popularListAdapter = new ParseQueryAdapter<>(getActivity(), factory);
+            popularListAdapter = new popularListAdapter(getActivity(), factory);
+
+//            Log.i("popularListActivity", "on activity created" + popularListAdapter);
+        }
+
+        private class popularListAdapter extends ParseQueryAdapter<Hashmap> {
+
+            public popularListAdapter(Context context, QueryFactory<Hashmap> queryFactory) {
+                super(context, queryFactory);
+            }
+
+            @Override
+            public View getItemView(Hashmap hashmap, View view, ViewGroup parent) {
+                ViewHolder holder;
+                if (view == null) {
+                    inflater = getActivity().getLayoutInflater();
+                    view = inflater.inflate(R.layout.list_item_hashmap, parent, false);
+                    holder = new ViewHolder();
+                    holder.hashmapTitle = (TextView) view
+                            .findViewById(R.id.hashmap_title);
+                    view.setTag(holder);
+                } else {
+                    holder = (ViewHolder) view.getTag();
+                }
+                TextView hashmapTitle = holder.hashmapTitle;
+                hashmapTitle.setText(hashmap.getTitle());
+                if (hashmap.isDraft()) {
+                    hashmapTitle.setTypeface(null, Typeface.ITALIC);
+                } else {
+                    hashmapTitle.setTypeface(null, Typeface.NORMAL);
+                }
+                return view;
+            }
+        }
+
+        private static class ViewHolder {
+            TextView hashmapTitle;
+        }
+
+        private void loadFromParse() {
+            ParseQuery<Hashmap> query = Hashmap.getQuery();
+            query.whereEqualTo("isDraft", false);
+//            query.include("hashmapItemList");
+            query.findInBackground(new FindCallback<Hashmap>() {
+                public void done(List<Hashmap> hashmaps, ParseException e) {
+                    if (e == null) {
+                        ParseObject.pinAllInBackground( hashmaps,
+                                new SaveCallback() {
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+//                                            if (!isFinishing()) {
+                                            popularListAdapter.loadObjects();
+//                                            Log.i("popularListActivity", "after loadobjects" + popularListAdapter);
+
+//                                            }
+                                        } else {
+                                            Log.e("popularListActivity","Error pinning hashmaps: " + e.getMessage());
+                                        }
+                                    }
+                                });
+                    } else {
+                        Log.i("popularListActivity",
+                                "loadFromParse: Error finding pinned hashmaps: "
+                                        + e.getMessage());
+                    }
+                }
+            });
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main_tab_popular, container, false);
+
+            ListView popularListView = (ListView) rootView.findViewById(R.id.popularListView);
+            LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
+            popularListView.setEmptyView(emptyView);
+            popularListView.setAdapter(popularListAdapter);
+
+            popularListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    Hashmap hashmap = popularListAdapter.getItem(position);
+                    currentSelectedHashmapTitle = hashmap.getTitle();
+                    currentSelectedHashmapId = hashmap.getObjectId();
+                    currentSelectedHashmap = hashmap;
+
+                    ParseAnalytics.trackEventInBackground("Select-Hashmap");
+
+                    hashmap.increment("open");
+                    hashmap.saveEventually();
+
+                    Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
+                    intent.putExtra("currentSelectedHashmapId", currentSelectedHashmapId);
+                    startActivity(intent);
+
+                }
+            });
+
+//            Log.i("popularListActivity", "return view" + popularListAdapter);
+            return rootView;
+        }
+    }
+
 
 
 }

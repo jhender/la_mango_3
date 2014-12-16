@@ -174,8 +174,8 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             switch(position) {
                 case 0:
                     return new HashmapItemFragment();
-//                case 1:
-//                    return new OldHashmapItemFragment();
+                case 1:
+                    return new HashmapItemFragment();
 //                case 2:
 //                    return new ItemFragment();
             }
@@ -185,7 +185,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 1;
+            return 2;
         }
 
         @Override
@@ -264,7 +264,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             ParseQuery<Hashmap> query1 = ParseQuery.getQuery("Hashmap");
             query1.include("hashmapItemList");
 //            query1.fromLocalDatastore();
-            //might want to re enable this. include here is too slow.
+            //might want to re enable this if can pre fetch. include here is too slow.
             query1.getInBackground(selectedHashmapId, new GetCallback<Hashmap>() {
                         public void done(Hashmap object, ParseException e) {
                             if (e == null) {
@@ -315,7 +315,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 //                        }
 //                    }
 
-                    Log.i("hmitactivity", "4/ get item: " + hm.getTitle());
+//                    Log.i("hmitactivity", "4/ get item: " + hm.getTitle());
 
                     customParseArrayAdapter.add(hm);
                 }
@@ -374,10 +374,6 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_hashmap_item_tab, container, false);
-//            ListView hmitemListView = (ListView) rootView.findViewById(R);
-//            LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
-//            hmitemListView.setEmptyView(emptyView);
-//            hmitemListView.setAdapter();
 
             ListView hmitemListView = (ListView) rootView.findViewById(R.id.list_view3);
             LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
