@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -45,6 +47,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
     private static String selectedHashmapId = "id";
     static Hashmap hashmap1;
     private static ArrayList<HashmapItem> hashmapItemArrayList = new ArrayList<>();
+    private static boolean isNewHm = false;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -103,7 +106,12 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         Log.i("hmitactivity", "0 seelectedhmID " + selectedHashmapId);
 
         // get Intent
-        selectedHashmapId = getIntent().getStringExtra("currentSelectedHashmapId");
+        String incomingId = getIntent().getStringExtra("currentSelectedHashmapId");
+        selectedHashmapId = incomingId;
+
+        if (incomingId.equals(selectedHashmapId)) {
+            isNewHm = true;
+        }
 
         // delete previous hashmap contents if new ID. Maybe I just should always delete it since it sometimes causes problems.
 //        if (string.equals(selectedHashmapId)) {
@@ -117,7 +125,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 //        }
         hashmapItemArrayList = new ArrayList<>();
 
-        Log.i("hmitactivity", "1 seelectedhmID " + selectedHashmapId);
+        Log.i("hmitactivity", "1 selectedhmID " + selectedHashmapId);
 
     }
 
@@ -174,8 +182,8 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             switch(position) {
                 case 0:
                     return new HashmapItemFragment();
-                case 1:
-                    return new HashmapItemFragment();
+//                case 1:
+//                    return new HashmapItemFragment();
 //                case 2:
 //                    return new ItemFragment();
             }
@@ -185,7 +193,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 1;
         }
 
         @Override
@@ -262,8 +270,15 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
         private void retrieveHashmap(){
             ParseQuery<Hashmap> query1 = ParseQuery.getQuery("Hashmap");
-            query1.include("hashmapItemList");
-//            query1.fromLocalDatastore();
+
+            if (isNewHm) {
+                query1.include("hashmapItemList");
+
+            } else {
+                query1.fromLocalDatastore();
+
+            }
+
             //might want to re enable this if can pre fetch. include here is too slow.
             query1.getInBackground(selectedHashmapId, new GetCallback<Hashmap>() {
                         public void done(Hashmap object, ParseException e) {
@@ -298,8 +313,8 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
             if (hashmapItemArrayList != null) {
                 Log.i("hmitactivity","size: " + hashmapItemArrayList.size());
-                for (int i = 0; i < hashmapItemArrayList.size(); i++) {
 
+                for (int i = 0; i < hashmapItemArrayList.size(); i++) {
                     HashmapItem hm = hashmapItemArrayList.get(i);
                     Log.i("hmitactivity" , "4/ hm: " + hm + " : " + hm.getTitle());
 //                    Log.i("hmitactivity" , "4/ list : " + aList.get(i).getTitle() + " : ");
@@ -337,6 +352,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 HashmapItem currentHMI = hashmapItemArrayList.get(position);
+                Log.i("hmitactivity", "position: " + position);
 
                 ViewHolder holder;
                 if (convertView == null) {
@@ -385,9 +401,34 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 //            setListAdapter(customParseArrayAdapter);
 //            customParseArrayAdapter.notifyDataSetChanged();
             //onItemClickListener
+
+            hmitemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    HashmapItem hashmapItem = customParseArrayAdapter.getItem(position);
+//                    currentSelectedHashmapTitle = hashmap.getTitle();
+//                    currentSelectedHashmapId = hashmap.getObjectId();
+//                    currentSelectedHashmap = hashmap;
+
+                    ParseAnalytics.trackEventInBackground("Select-HashmapItem");
+
+                    hashmapItem.increment("clicks");
+                    hashmapItem.saveEventually();
+
+//                    Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
+//                    intent.putExtra("currentSelectedHashmapItemId", hashmapItem.getObjectId());
+//                    startActivity(intent);
+
+                }
+            });
+
             return rootView;
         }
     }
+
+
 
     /* This fragment gets raw Items from Parse.
      *

@@ -206,7 +206,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             ParseQueryAdapter.QueryFactory<Hashmap> factory = new ParseQueryAdapter.QueryFactory<Hashmap>() {
                 public ParseQuery<Hashmap> create() {
                     ParseQuery<Hashmap> query = Hashmap.getQuery();
-                    query.orderByDescending("createdAt");
+                    query.orderByAscending("title");
                     query.fromLocalDatastore();
                     return query;
                 }
@@ -303,7 +303,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                     currentSelectedHashmapId = hashmap.getObjectId();
                     currentSelectedHashmap = hashmap;
 
-                    ParseAnalytics.trackEventInBackground("Select-Hashmap");
+                    ParseAnalytics.trackEventInBackground("Select-Hashmap-FromPopular");
 
                     hashmap.increment("open");
                     hashmap.saveEventually();
@@ -437,7 +437,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                     currentSelectedHashmapId = hashmap.getObjectId();
                     currentSelectedHashmap = hashmap;
 
-                    ParseAnalytics.trackEventInBackground("Select-Hashmap");
+                    ParseAnalytics.trackEventInBackground("Select-Hashmap-FromTop");
 
                     hashmap.increment("open");
                     hashmap.saveEventually();
@@ -448,8 +448,6 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 
                 }
             });
-
-//            Log.i("popularListActivity", "return view" + popularListAdapter);
             return rootView;
         }
     }

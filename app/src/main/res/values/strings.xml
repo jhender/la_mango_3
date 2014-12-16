@@ -41,7 +41,7 @@
     <!-- Tab Activity -->
     <string name="title_activity_main_tab">Hashmap</string>
     <string name="title_section1">Popular</string>
-    <string name="title_section2">Other</string>
+    <string name="title_section2">Top</string>
     <string name="title_section3">-</string>
 
     <!--hashmap tab activity-->
