@@ -312,7 +312,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
             Log.i("hmitactivity","3 attempt retrieve array: " + hashmapItemArrayList);
 //            Log.i("hmitactivity","3 attempt retrieve list: " + aList);
-            Log.i("hmitactivity" , "4/ : " + hashmapItemArrayList.get(0).getTitle() );
+//            Log.i("hmitactivity" , "4/ : " + hashmapItemArrayList.get(0).getTitle() );
 
             if (hashmapItemArrayList != null) {
                 Log.i("hmitactivity","size: " + hashmapItemArrayList.size());

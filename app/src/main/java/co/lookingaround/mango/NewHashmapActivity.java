@@ -14,7 +14,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 /*
- * Deprecated Activity
+ * SecretPanel Activity
  */
 public class NewHashmapActivity extends Activity {
 

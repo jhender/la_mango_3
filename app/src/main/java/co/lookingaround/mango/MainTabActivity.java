@@ -244,17 +244,16 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                 public ParseQuery<Hashmap> create() {
                     ParseQuery<Hashmap> query = Hashmap.getQuery();
                     query.orderByAscending("title");
+                    query.whereEqualTo("isDraft", false);
                     query.fromLocalDatastore();
                     return query;
                 }
             };
 
+            // Load data from Parse backend
             loadFromParse();
 
-//            popularListAdapter = new ParseQueryAdapter<>(getActivity(), factory);
             popularListAdapter = new popularListAdapter(getActivity(), factory);
-
-//            Log.i("popularListActivity", "on activity created" + popularListAdapter);
         }
 
         private class popularListAdapter extends ParseQueryAdapter<Hashmap> {
@@ -358,8 +357,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     }
 
     /**
-     * Show the list of Popular Hashmaps
-     * Make Clickable to jump to Map Fragment
+     * Show the list of Top Hashmaps
+     * Doesn't work well
      */
     public static class TopFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -377,8 +376,8 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             ParseQueryAdapter.QueryFactory<Hashmap> factory = new ParseQueryAdapter.QueryFactory<Hashmap>() {
                 public ParseQuery<Hashmap> create() {
                     ParseQuery<Hashmap> query = Hashmap.getQuery();
-                    query.setLimit(5);
                     query.orderByDescending("open");
+                    query.setLimit(1);
                     query.fromLocalDatastore();
                     return query;
                 }
@@ -386,10 +385,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 
             loadFromParse();
 
-//            popularListAdapter = new ParseQueryAdapter<>(getActivity(), factory);
             popularListAdapter = new popularListAdapter(getActivity(), factory);
-
-//            Log.i("popularListActivity", "on activity created" + popularListAdapter);
         }
 
         private class popularListAdapter extends ParseQueryAdapter<Hashmap> {

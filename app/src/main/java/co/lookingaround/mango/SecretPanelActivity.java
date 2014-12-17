@@ -1,5 +1,6 @@
 package co.lookingaround.mango;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ public class SecretPanelActivity extends ActionBarActivity {
     Button button3;
     Button button4;
     TextView textView1;
+    Button button5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,14 @@ public class SecretPanelActivity extends ActionBarActivity {
         {   public void onClick(View v)
             {
                 addHashMap();
+            }
+        });
+
+        button5 = (Button)findViewById(R.id.button5);
+        button5.setOnClickListener(new View.OnClickListener()
+        {   public void onClick(View v)
+            {
+                addCustomHashMap();
             }
         });
     }
@@ -131,6 +141,10 @@ public class SecretPanelActivity extends ActionBarActivity {
 
     }
 
+    private void addCustomHashMap() {
+        Intent intent = new Intent(this, NewHashmapActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

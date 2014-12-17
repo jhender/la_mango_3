@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="18sp"
-        android:text="@string/hashmap_prompt" />
+        android:text="title" />
 
     <EditText
         android:id="@+id/hashmap_text"
