@@ -54,6 +54,6 @@
 
     <!-- Secret Panel Activity -->
     <string name="title_activity_secret_panel">SecretPanelActivity</string>
-    <string name="title_activity_item_detail">ItemDetailActivity</string>
+    <string name="title_activity_item_detail"> </string>
 
 </resources>

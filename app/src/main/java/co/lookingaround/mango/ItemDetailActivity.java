@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
@@ -19,6 +20,8 @@ public class ItemDetailActivity extends ActionBarActivity {
     TextView textView1;
     TextView textView2;
     TextView textView3;
+    Button button1;
+    Button button2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,8 @@ public class ItemDetailActivity extends ActionBarActivity {
         textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
         textView3 = (TextView) findViewById(R.id.textView3);
+        button1 = (Button) findViewById(R.id.button1);
+        button2 = (Button) findViewById(R.id.button2);
 
         String incomingId = getIntent().getStringExtra("currentSelectedHashmapItemId");
 
