@@ -185,8 +185,8 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             switch(position) {
                 case 0:
                     return new HashmapItemFragment();
-//                case 1:
-//                    return new HashmapItemFragment();
+                case 1:
+                    return new MainTabActivity.PopularFragment();
 //                case 2:
 //                    return new ItemFragment();
             }
@@ -196,7 +196,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 1;
+            return 2;
         }
 
         @Override
@@ -432,7 +432,6 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
     }
 
 
-
     /* This fragment gets raw Items from Parse.
      *
      */
@@ -567,5 +566,6 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
         }
     }
+
 
 }

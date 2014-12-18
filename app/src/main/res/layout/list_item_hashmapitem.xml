@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical" >
+    android:gravity="center_vertical"
+    android:padding="5dp"
+    tools:context=".HashmapItemTabActivity">
 
     <TextView
         android:id="@+id/hashmapitem_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:layout_margin="5dp"
         android:textSize="20sp"
+        android:textColor="@color/black"
         android:layout_alignParentLeft="true"
         />
     <TextView
@@ -18,7 +21,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:layout_margin="5dp"
         android:textSize="12sp"
         android:layout_below="@+id/hashmapitem_title" />
     <TextView
@@ -26,7 +28,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:layout_margin="5dp"
         android:textSize="12sp"
         android:layout_below="@+id/hashmapitem_address" />
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Hashmap</string>
+    <string name="app_name">Tinymap</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
@@ -25,11 +25,11 @@
     <string name="error_name">enter a username</string>
     <string name="error_password">enter a password</string>
     <string name="password_mismatch">enter the same password twice</string>
-    <string name="hashmap_prompt">Enter Hashmap name:</string>
+    <string name="hashmap_prompt">Enter Tinymap name:</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete</string>
-    <string name="action_new">New Hashmap</string>
+    <string name="action_new">New Tinymap</string>
     <string name="action_sync">Sync</string>
     <string name="action_logout">Log Out</string>
     <string name="action_login">Log In</string>
@@ -39,14 +39,14 @@
     <string name="logged_in">Welcome, %1$s</string>
 
     <!-- Tab Activity -->
-    <string name="title_activity_main_tab">Hashmap</string>
+    <string name="title_activity_main_tab">Tinymap</string>
     <string name="title_section1">Popular</string>
     <string name="title_section2">Top</string>
     <string name="title_section3">-</string>
 
     <!--hashmap tab activity-->
     <string name="title_activity_hashmap_item_tab"> </string>
-    <string name="title_activity_hashmapitem_tab">Hashmap</string>
+    <string name="title_activity_hashmapitem_tab">Tinymap</string>
     <string name="title_hashmapitemtab_section1">List</string>
     <string name="title_hashmapitemtab_section2">Map</string>
     <string name="title_hashmapitemtab_section3">-</string>
