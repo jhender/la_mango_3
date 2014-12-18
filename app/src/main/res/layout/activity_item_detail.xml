@@ -40,7 +40,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Share this thing?"
+            android:text="Share URL"
             android:id="@+id/button1" />
 
         <Button

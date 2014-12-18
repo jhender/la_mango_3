@@ -1,15 +1,18 @@
 package co.lookingaround.mango;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.GetCallback;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseException;
 
@@ -37,6 +40,24 @@ public class ItemDetailActivity extends ActionBarActivity {
         String incomingId = getIntent().getStringExtra("currentSelectedHashmapItemId");
 
         getItem(incomingId);
+
+        button1.setOnClickListener(new View.OnClickListener()
+        {   public void onClick(View v)
+            {
+                String url = "http://tinymap.co/m/" + hashmapItem.getUuidString();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+        //todo change this to a Share Via Intent. "Check out www.tinymap.co/m/adfoiuo-342343/"
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                Toast.makeText(getBaseContext(), "nothing yet" , Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     //retrieve item from local datastore
@@ -49,7 +70,7 @@ public class ItemDetailActivity extends ActionBarActivity {
 
           public void done(HashmapItem object, ParseException e) {
 //                if (!isFinishing()) {
-//                    hashmapItem = object;
+                hashmapItem = object;
 ////                    todoText.setText(todo.getTitle());
 ////                    deleteButton.setVisibility(View.VISIBLE);
                 textView1.setText(object.getTitle());
