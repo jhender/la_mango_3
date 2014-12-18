@@ -102,6 +102,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.lookingaround.mango.MainTabActivity" />
         </activity>
+        <activity
+            android:name=".ItemDetailActivity"
+            android:label="@string/title_activity_item_detail"
+            android:parentActivityName=".HashmapList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.lookingaround.mango.HashmapList" />
+        </activity>
     </application>
 
 </manifest>

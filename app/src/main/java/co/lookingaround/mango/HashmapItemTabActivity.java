@@ -420,6 +420,9 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                     hashmapItem.increment("clicks");
                     hashmapItem.saveEventually();
 
+                    Intent intent = new Intent(view.getContext(), ItemDetailActivity.class);
+                    intent.putExtra("currentSelectedHashmapItemId", hashmapItem.getObjectId());
+                    startActivity(intent);
 //                    Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
 //                    intent.putExtra("currentSelectedHashmapItemId", hashmapItem.getObjectId());
 //                    startActivity(intent);
@@ -554,6 +557,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                                         int position, long id) {
 
                     HashmapItem hashmapitem = hashmapItemListAdapter.getItem(position);
+
 //                    currentSelectedHashmapTitle = hashmapitem.getTitle();
 //                    Toast.makeText(getActivity(), "Item clicked " + currentSelectedHashmapTitle, Toast.LENGTH_SHORT).show();
 

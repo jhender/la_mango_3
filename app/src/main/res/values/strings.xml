@@ -44,16 +44,16 @@
     <string name="title_section2">Top</string>
     <string name="title_section3">-</string>
 
-    <!--hashmap tab activity-->
-    <string name="title_activity_hashmap_item_tab"> </string>
+    <!-- hashmap tab activity -->
+    <string name="title_activity_hashmap_item_tab"></string>
     <string name="title_activity_hashmapitem_tab">Tinymap</string>
     <string name="title_hashmapitemtab_section1">List</string>
     <string name="title_hashmapitemtab_section2">Map</string>
     <string name="title_hashmapitemtab_section3">-</string>
     <string name="loading">Loading</string>
 
-    <!--Secret Panel Activity-->
+    <!-- Secret Panel Activity -->
     <string name="title_activity_secret_panel">SecretPanelActivity</string>
-
+    <string name="title_activity_item_detail">ItemDetailActivity</string>
 
 </resources>
