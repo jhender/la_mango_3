@@ -1,4 +1,4 @@
-package co.lookingaround.mango;
+package co.tinymap.mango;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
@@ -11,10 +11,10 @@ import java.util.UUID;
  * Created by jianhui.ho on 12/8/2014.
  * Creates Parse Object for HashMap
  */
-@ParseClassName("Hashmap")
-public class Hashmap extends ParseObject {
+@ParseClassName("HashmapItem")
+public class HashmapItem extends ParseObject {
 
-    public Hashmap() {
+    public HashmapItem() {
         //A default constructor is required.
     }
     public String getTitle() {
@@ -50,9 +50,30 @@ public class Hashmap extends ParseObject {
         return getString("uuid");
     }
 
-    public static ParseQuery<Hashmap> getQuery() {
-        return ParseQuery.getQuery(Hashmap.class);
+    public static ParseQuery<HashmapItem> getQuery() {
+        return ParseQuery.getQuery(HashmapItem.class);
     }
+
+    public String getAddress() {
+        return getString("address");
+    }
+
+    public void setAddress(String address) {
+        put("address", address);
+    }
+
+    public String getDescription() {
+        return getString("description");
+    }
+
+    public void setDescription(String description) {
+        put("description", description);
+    }
+
+    /* TODO
+     * add in Relation to ParseObject Hashmap
+     *
+     */
 
 
 }

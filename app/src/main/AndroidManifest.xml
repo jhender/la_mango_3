@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="co.lookingaround.mango" >
+    package="co.tinymap.mango" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,10 +11,18 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:name="co.lookingaround.mango.permission.C2D_MESSAGE"
+        android:name="co.tinymap.mango.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="co.lookingaround.mango.permission.C2D_MESSAGE" />
+    <uses-permission android:name="co.tinymap.mango.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <!--
+ The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but are recommended.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".HashmapApplication"
@@ -82,7 +90,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="co.lookingaround.mango" />
+                <category android:name="co.tinymap.mango" />
             </intent-filter>
         </receiver>
 
@@ -92,7 +100,7 @@
             android:parentActivityName=".MainTabActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="co.lookingaround.mango.MainTabActivity" />
+                android:value="co.tinymap.mango.MainTabActivity" />
         </activity>
         <activity
             android:name=".HashmapItemTabActivity"
@@ -100,7 +108,7 @@
             android:parentActivityName=".MainTabActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="co.lookingaround.mango.MainTabActivity" />
+                android:value="co.tinymap.mango.MainTabActivity" />
         </activity>
         <activity
             android:name=".ItemDetailActivity"
@@ -108,8 +116,23 @@
             android:parentActivityName=".HashmapList" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="co.lookingaround.mango.HashmapList" />
+                android:value="co.tinymap.mango.HashmapList" />
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <!--<activity-->
+            <!--android:name=".MapsFragment"-->
+            <!--android:label="@string/title_activity_maps" >-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="co.tinymap.mango.HashmapList" />-->
+        <!--</activity>-->
     </application>
 
 </manifest>

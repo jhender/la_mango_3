@@ -1,4 +1,4 @@
-package co.lookingaround.mango;
+package co.tinymap.mango;
 
 import android.app.Activity;
 import android.os.Bundle;

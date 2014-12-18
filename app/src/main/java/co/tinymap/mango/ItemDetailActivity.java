@@ -1,4 +1,4 @@
-package co.lookingaround.mango;
+package co.tinymap.mango;
 
 import android.content.Intent;
 import android.net.Uri;

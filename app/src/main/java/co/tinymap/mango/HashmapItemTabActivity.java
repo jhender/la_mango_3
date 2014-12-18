@@ -1,4 +1,4 @@
-package co.lookingaround.mango;
+package co.tinymap.mango;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,6 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -16,12 +15,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.text.Layout;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -186,7 +180,8 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                 case 0:
                     return new HashmapItemFragment();
                 case 1:
-                    return new MainTabActivity.PopularFragment();
+                    return MapsFragment.newInstance();
+
 //                case 2:
 //                    return new ItemFragment();
             }
