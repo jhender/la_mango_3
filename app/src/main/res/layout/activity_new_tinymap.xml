@@ -12,7 +12,7 @@
         android:text="title" />
 
     <EditText
-        android:id="@+id/hashmap_text"
+        android:id="@+id/tinymap_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"

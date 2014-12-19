@@ -39,13 +39,13 @@ import java.util.List;
  * Deprecated Activity
  *
  */
-public class HashmapList extends ActionBarActivity {
+public class TinyMapList extends ActionBarActivity {
 
     private static final int LOGIN_ACTIVITY_CODE = 100;
     private static final int EDIT_ACTIVITY_CODE = 200;
 
     // Adapter for the Hashmaps Parse Query
-    private ParseQueryAdapter<Hashmap> hashmapListAdapter;
+    private ParseQueryAdapter<TinyMap> hashmapListAdapter;
 
     private LayoutInflater inflater;
 
@@ -58,7 +58,7 @@ public class HashmapList extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hashmap_list);
+        setContentView(R.layout.activity_tinymap_list);
 
         // Set up the views
         hashmapListView = (ListView) findViewById(R.id.hashmap_list_view);
@@ -67,9 +67,9 @@ public class HashmapList extends ActionBarActivity {
         loggedInInfoView = (TextView) findViewById(R.id.loggedin_info);
 
         // Set up the Parse query to use in the adapter
-        ParseQueryAdapter.QueryFactory<Hashmap> factory = new ParseQueryAdapter.QueryFactory<Hashmap>() {
-            public ParseQuery<Hashmap> create() {
-                ParseQuery<Hashmap> query = Hashmap.getQuery();
+        ParseQueryAdapter.QueryFactory<TinyMap> factory = new ParseQueryAdapter.QueryFactory<TinyMap>() {
+            public ParseQuery<TinyMap> create() {
+                ParseQuery<TinyMap> query = TinyMap.getQuery();
                 query.orderByDescending("createdAt");
                 query.fromLocalDatastore();
                 return query;
@@ -87,8 +87,8 @@ public class HashmapList extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Hashmap hashmap = hashmapListAdapter.getItem(position);
-                openEditView(hashmap);
+                TinyMap tinyMap = hashmapListAdapter.getItem(position);
+                openEditView(tinyMap);
             }
         });
     }
@@ -115,9 +115,9 @@ public class HashmapList extends ActionBarActivity {
         }
     }
 
-    private void openEditView(Hashmap hashmap) {
-        Intent i = new Intent(this, NewHashmapActivity.class);
-        i.putExtra("ID", hashmap.getUuidString());
+    private void openEditView(TinyMap tinyMap) {
+        Intent i = new Intent(this, NewTinyMapActivity.class);
+        i.putExtra("ID", tinyMap.getUuidString());
         startActivityForResult(i, EDIT_ACTIVITY_CODE);
     }
 
@@ -155,7 +155,7 @@ public class HashmapList extends ActionBarActivity {
             // Make sure there's a valid user, anonymous
             // or regular
             if (ParseUser.getCurrentUser() != null) {
-                startActivityForResult(new Intent(this, NewHashmapActivity.class),
+                startActivityForResult(new Intent(this, NewTinyMapActivity.class),
                         EDIT_ACTIVITY_CODE);
             }
         }
@@ -175,7 +175,7 @@ public class HashmapList extends ActionBarActivity {
             hashmapListAdapter.clear();
             // Unpin all the current objects
             ParseObject
-                    .unpinAllInBackground(HashmapApplication.HASHMAP_GROUP_NAME);
+                    .unpinAllInBackground(TinyMapApplication.TINYMAP_GROUP_NAME);
         }
 
         if (item.getItemId() == R.id.action_login) {
@@ -210,17 +210,17 @@ public class HashmapList extends ActionBarActivity {
                 // In this app, local changes should overwrite content on the
                 // server.
 
-                ParseQuery<Hashmap> query = Hashmap.getQuery();
-                query.fromPin(HashmapApplication.HASHMAP_GROUP_NAME);
+                ParseQuery<TinyMap> query = TinyMap.getQuery();
+                query.fromPin(TinyMapApplication.TINYMAP_GROUP_NAME);
                 query.whereEqualTo("isDraft", true);
-                query.findInBackground(new FindCallback<Hashmap>() {
-                    public void done(List<Hashmap> hashmaps, ParseException e) {
+                query.findInBackground(new FindCallback<TinyMap>() {
+                    public void done(List<TinyMap> tinyMaps, ParseException e) {
                         if (e == null) {
-                            for (final Hashmap hashmap : hashmaps) {
+                            for (final TinyMap tinyMap : tinyMaps) {
                                 // Set is draft flag to false before
                                 // syncing to Parse
-                                hashmap.setDraft(false);
-                                hashmap.saveInBackground(new SaveCallback() {
+                                tinyMap.setDraft(false);
+                                tinyMap.saveInBackground(new SaveCallback() {
 
                                     @Override
                                     public void done(ParseException e) {
@@ -233,7 +233,7 @@ public class HashmapList extends ActionBarActivity {
                                         } else {
                                             // Reset the is draft flag locally
                                             // to true
-                                            hashmap.setDraft(true);
+                                            tinyMap.setDraft(true);
                                         }
                                     }
 
@@ -265,12 +265,12 @@ public class HashmapList extends ActionBarActivity {
     }
 
     private void loadFromParse() {
-        ParseQuery<Hashmap> query = Hashmap.getQuery();
+        ParseQuery<TinyMap> query = TinyMap.getQuery();
         query.whereEqualTo("author", ParseUser.getCurrentUser());
-        query.findInBackground(new FindCallback<Hashmap>() {
-            public void done(List<Hashmap> hashmaps, ParseException e) {
+        query.findInBackground(new FindCallback<TinyMap>() {
+            public void done(List<TinyMap> tinyMaps, ParseException e) {
                 if (e == null) {
-                    ParseObject.pinAllInBackground((List<Hashmap>) hashmaps,
+                    ParseObject.pinAllInBackground((List<TinyMap>) tinyMaps,
                             new SaveCallback() {
                                 public void done(ParseException e) {
                                     if (e == null) {
@@ -293,37 +293,37 @@ public class HashmapList extends ActionBarActivity {
         });
     }
 
-    private class HashTagListAdapter extends ParseQueryAdapter<Hashmap> {
+    private class HashTagListAdapter extends ParseQueryAdapter<TinyMap> {
 
         public HashTagListAdapter(Context context,
-                               QueryFactory<Hashmap> queryFactory) {
+                               QueryFactory<TinyMap> queryFactory) {
             super(context, queryFactory);
         }
 
         @Override
-        public View getItemView(Hashmap hashmap, View view, ViewGroup parent) {
+        public View getItemView(TinyMap tinyMap, View view, ViewGroup parent) {
             ViewHolder holder;
             if (view == null) {
-                view = inflater.inflate(R.layout.list_item_hashmap, parent, false);
+                view = inflater.inflate(R.layout.list_item_tinymap, parent, false);
                 holder = new ViewHolder();
-                holder.hashmapTitle = (TextView) view
-                        .findViewById(R.id.hashmap_title);
+                holder.tinyMapTitle = (TextView) view
+                        .findViewById(R.id.tinyMap_title);
                 view.setTag(holder);
             } else {
                 holder = (ViewHolder) view.getTag();
             }
-            TextView hashmapTitle = holder.hashmapTitle;
-            hashmapTitle.setText(hashmap.getTitle());
-            if (hashmap.isDraft()) {
-                hashmapTitle.setTypeface(null, Typeface.ITALIC);
+            TextView tinyMapTitle = holder.tinyMapTitle;
+            tinyMapTitle.setText(tinyMap.getTitle());
+            if (tinyMap.isDraft()) {
+                tinyMapTitle.setTypeface(null, Typeface.ITALIC);
             } else {
-                hashmapTitle.setTypeface(null, Typeface.NORMAL);
+                tinyMapTitle.setTypeface(null, Typeface.NORMAL);
             }
             return view;
         }
     }
 
     private static class ViewHolder {
-        TextView hashmapTitle;
+        TextView tinyMapTitle;
     }
 }

@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.parse.Parse;
 import com.parse.ParseAnalytics;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.ui.ParseLoginBuilder;
@@ -78,7 +76,7 @@ public class MainActivity extends ActionBarActivity {
         button1.setOnClickListener(new View.OnClickListener()
         {   public void onClick(View v)
             {
-                Intent intent = new Intent(MainActivity.this, HashmapList.class);
+                Intent intent = new Intent(MainActivity.this, TinyMapList.class);
                 startActivity(intent);
                 finish();
             }

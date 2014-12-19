@@ -3,21 +3,20 @@ package co.tinymap.mango;
 import android.app.Application;
 
 import com.parse.Parse;
-import com.parse.ParseACL;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-public class HashmapApplication extends Application {
+public class TinyMapApplication extends Application {
 	
-	public static final String HASHMAP_GROUP_NAME = "ALL_HASHMAPS";
+	public static final String TINYMAP_GROUP_NAME = "ALL_TINYMAPS";
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		
 		// add Hashmap subclass
-		ParseObject.registerSubclass(Hashmap.class);
-        ParseObject.registerSubclass(HashmapItem.class);
+		ParseObject.registerSubclass(TinyMap.class);
+        ParseObject.registerSubclass(TinyMapItem.class);
 
 		// enable the Local Datastore
 		Parse.enableLocalDatastore(getApplicationContext());

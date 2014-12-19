@@ -24,7 +24,6 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
@@ -39,9 +38,9 @@ import com.parse.ui.ParseLoginBuilder;
 
 public class MainTabActivity extends ActionBarActivity implements ActionBar.TabListener {
 
-    private static String currentSelectedHashmapTitle = "Hashmap";
-    private static String currentSelectedHashmapId = "id";
-    private static Hashmap currentSelectedHashmap = new Hashmap();
+    private static String currentSelectedTinyMapTitle = "TinyMap";
+    private static String currentSelectedTinyMapId = "id";
+    private static TinyMap currentSelectedTinyMap = new TinyMap();
 
     private static final int LOGIN_ACTIVITY_CODE = 100;
 
@@ -152,7 +151,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 //            hashmapListAdapter.clear();
             // Unpin all the current objects
 //            ParseObject
-//                    .unpinAllInBackground(HashmapApplication.HASHMAP_GROUP_NAME);
+//                    .unpinAllInBackground(HashmapApplication.TINYMAP_GROUP_NAME);
         }
 
         if (item.getItemId() == R.id.action_login) {
@@ -230,7 +229,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     public static class PopularFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        private ParseQueryAdapter<Hashmap> popularListAdapter;
+        private ParseQueryAdapter<TinyMap> popularListAdapter;
         private LayoutInflater inflater;
 
         @Override
@@ -240,9 +239,9 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             Bundle args = new Bundle();
 
             // Set up the Parse query to use in the adapter
-            ParseQueryAdapter.QueryFactory<Hashmap> factory = new ParseQueryAdapter.QueryFactory<Hashmap>() {
-                public ParseQuery<Hashmap> create() {
-                    ParseQuery<Hashmap> query = Hashmap.getQuery();
+            ParseQueryAdapter.QueryFactory<TinyMap> factory = new ParseQueryAdapter.QueryFactory<TinyMap>() {
+                public ParseQuery<TinyMap> create() {
+                    ParseQuery<TinyMap> query = TinyMap.getQuery();
                     query.orderByAscending("title");
                     query.whereEqualTo("isDraft", false);
                     query.fromLocalDatastore();
@@ -256,48 +255,48 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             popularListAdapter = new popularListAdapter(getActivity(), factory);
         }
 
-        private class popularListAdapter extends ParseQueryAdapter<Hashmap> {
+        private class popularListAdapter extends ParseQueryAdapter<TinyMap> {
 
-            public popularListAdapter(Context context, QueryFactory<Hashmap> queryFactory) {
+            public popularListAdapter(Context context, QueryFactory<TinyMap> queryFactory) {
                 super(context, queryFactory);
             }
 
             @Override
-            public View getItemView(Hashmap hashmap, View view, ViewGroup parent) {
+            public View getItemView(TinyMap tinyMap, View view, ViewGroup parent) {
                 ViewHolder holder;
                 if (view == null) {
                     inflater = getActivity().getLayoutInflater();
-                    view = inflater.inflate(R.layout.list_item_hashmap, parent, false);
+                    view = inflater.inflate(R.layout.list_item_tinymap, parent, false);
                     holder = new ViewHolder();
-                    holder.hashmapTitle = (TextView) view
-                            .findViewById(R.id.hashmap_title);
+                    holder.tinymapTitle = (TextView) view
+                            .findViewById(R.id.tinyMap_title);
                     view.setTag(holder);
                 } else {
                     holder = (ViewHolder) view.getTag();
                 }
-                TextView hashmapTitle = holder.hashmapTitle;
-                hashmapTitle.setText(hashmap.getTitle());
-                if (hashmap.isDraft()) {
-                    hashmapTitle.setTypeface(null, Typeface.ITALIC);
+                TextView tinymapTitle = holder.tinymapTitle;
+                tinymapTitle.setText(tinyMap.getTitle());
+                if (tinyMap.isDraft()) {
+                    tinymapTitle.setTypeface(null, Typeface.ITALIC);
                 } else {
-                    hashmapTitle.setTypeface(null, Typeface.NORMAL);
+                    tinymapTitle.setTypeface(null, Typeface.NORMAL);
                 }
                 return view;
             }
         }
 
         private static class ViewHolder {
-            TextView hashmapTitle;
+            TextView tinymapTitle;
         }
 
         private void loadFromParse() {
-            ParseQuery<Hashmap> query = Hashmap.getQuery();
+            ParseQuery<TinyMap> query = TinyMap.getQuery();
             query.whereEqualTo("isDraft", false);
 //            query.include("hashmapItemList");
-            query.findInBackground(new FindCallback<Hashmap>() {
-                public void done(List<Hashmap> hashmaps, ParseException e) {
+            query.findInBackground(new FindCallback<TinyMap>() {
+                public void done(List<TinyMap> tinyMaps, ParseException e) {
                     if (e == null) {
-                        ParseObject.pinAllInBackground( hashmaps,
+                        ParseObject.pinAllInBackground(tinyMaps,
                                 new SaveCallback() {
                                     public void done(ParseException e) {
                                         if (e == null) {
@@ -334,18 +333,18 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
 
-                    Hashmap hashmap = popularListAdapter.getItem(position);
-                    currentSelectedHashmapTitle = hashmap.getTitle();
-                    currentSelectedHashmapId = hashmap.getObjectId();
-                    currentSelectedHashmap = hashmap;
+                    TinyMap tinyMap = popularListAdapter.getItem(position);
+                    currentSelectedTinyMapTitle = tinyMap.getTitle();
+                    currentSelectedTinyMapId = tinyMap.getObjectId();
+                    currentSelectedTinyMap = tinyMap;
 
-                    ParseAnalytics.trackEventInBackground("Select-Hashmap-FromPopular");
+                    ParseAnalytics.trackEventInBackground("Select-TinyMap-FromPopular");
 
-                    hashmap.increment("open");
-                    hashmap.saveEventually();
+                    tinyMap.increment("open");
+                    tinyMap.saveEventually();
 
-                    Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
-                    intent.putExtra("currentSelectedHashmapId", currentSelectedHashmapId);
+                    Intent intent = new Intent(view.getContext(), TinyMapItemTabActivity.class);
+                    intent.putExtra("currentSelectedTinyMapId", currentSelectedTinyMapId);
                     startActivity(intent);
 
                 }
@@ -363,7 +362,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
     public static class TopFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        private ParseQueryAdapter<Hashmap> popularListAdapter;
+        private ParseQueryAdapter<TinyMap> popularListAdapter;
         private LayoutInflater inflater;
 
         @Override
@@ -373,9 +372,9 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             Bundle args = new Bundle();
 
             // Set up the Parse query to use in the adapter
-            ParseQueryAdapter.QueryFactory<Hashmap> factory = new ParseQueryAdapter.QueryFactory<Hashmap>() {
-                public ParseQuery<Hashmap> create() {
-                    ParseQuery<Hashmap> query = Hashmap.getQuery();
+            ParseQueryAdapter.QueryFactory<TinyMap> factory = new ParseQueryAdapter.QueryFactory<TinyMap>() {
+                public ParseQuery<TinyMap> create() {
+                    ParseQuery<TinyMap> query = TinyMap.getQuery();
                     query.orderByDescending("open");
                     query.setLimit(1);
                     query.fromLocalDatastore();
@@ -388,48 +387,48 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
             popularListAdapter = new popularListAdapter(getActivity(), factory);
         }
 
-        private class popularListAdapter extends ParseQueryAdapter<Hashmap> {
+        private class popularListAdapter extends ParseQueryAdapter<TinyMap> {
 
-            public popularListAdapter(Context context, QueryFactory<Hashmap> queryFactory) {
+            public popularListAdapter(Context context, QueryFactory<TinyMap> queryFactory) {
                 super(context, queryFactory);
             }
 
             @Override
-            public View getItemView(Hashmap hashmap, View view, ViewGroup parent) {
+            public View getItemView(TinyMap tinyMap, View view, ViewGroup parent) {
                 ViewHolder holder;
                 if (view == null) {
                     inflater = getActivity().getLayoutInflater();
-                    view = inflater.inflate(R.layout.list_item_hashmap, parent, false);
+                    view = inflater.inflate(R.layout.list_item_tinymap, parent, false);
                     holder = new ViewHolder();
-                    holder.hashmapTitle = (TextView) view
-                            .findViewById(R.id.hashmap_title);
+                    holder.mapTitle = (TextView) view
+                            .findViewById(R.id.tinyMap_title);
                     view.setTag(holder);
                 } else {
                     holder = (ViewHolder) view.getTag();
                 }
-                TextView hashmapTitle = holder.hashmapTitle;
-                hashmapTitle.setText(hashmap.getTitle());
-                if (hashmap.isDraft()) {
-                    hashmapTitle.setTypeface(null, Typeface.ITALIC);
+                TextView title = holder.mapTitle;
+                title.setText(tinyMap.getTitle());
+                if (tinyMap.isDraft()) {
+                    title.setTypeface(null, Typeface.ITALIC);
                 } else {
-                    hashmapTitle.setTypeface(null, Typeface.NORMAL);
+                    title.setTypeface(null, Typeface.NORMAL);
                 }
                 return view;
             }
         }
 
         private static class ViewHolder {
-            TextView hashmapTitle;
+            TextView mapTitle;
         }
 
         private void loadFromParse() {
-            ParseQuery<Hashmap> query = Hashmap.getQuery();
+            ParseQuery<TinyMap> query = TinyMap.getQuery();
             query.whereEqualTo("isDraft", false);
 //            query.include("hashmapItemList");
-            query.findInBackground(new FindCallback<Hashmap>() {
-                public void done(List<Hashmap> hashmaps, ParseException e) {
+            query.findInBackground(new FindCallback<TinyMap>() {
+                public void done(List<TinyMap> tinyMaps, ParseException e) {
                     if (e == null) {
-                        ParseObject.pinAllInBackground( hashmaps,
+                        ParseObject.pinAllInBackground(tinyMaps,
                                 new SaveCallback() {
                                     public void done(ParseException e) {
                                         if (e == null) {
@@ -466,18 +465,18 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
 
-                    Hashmap hashmap = popularListAdapter.getItem(position);
-                    currentSelectedHashmapTitle = hashmap.getTitle();
-                    currentSelectedHashmapId = hashmap.getObjectId();
-                    currentSelectedHashmap = hashmap;
+                    TinyMap tinyMap = popularListAdapter.getItem(position);
+                    currentSelectedTinyMapTitle = tinyMap.getTitle();
+                    currentSelectedTinyMapId = tinyMap.getObjectId();
+                    currentSelectedTinyMap = tinyMap;
 
                     ParseAnalytics.trackEventInBackground("Select-Hashmap-FromTop");
 
-                    hashmap.increment("open");
-                    hashmap.saveEventually();
+                    tinyMap.increment("open");
+                    tinyMap.saveEventually();
 
-                    Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
-                    intent.putExtra("currentSelectedHashmapId", currentSelectedHashmapId);
+                    Intent intent = new Intent(view.getContext(), TinyMapItemTabActivity.class);
+                    intent.putExtra("currentSelectedTinyMapId", currentSelectedTinyMapId);
                     startActivity(intent);
 
                 }

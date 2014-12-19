@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -69,8 +68,8 @@ public class SecretPanelActivity extends ActionBarActivity {
 
 
     private void createhashmapitem() {
-        HashmapItem hmItem;
-            hmItem = new HashmapItem();
+        TinyMapItem hmItem;
+            hmItem = new TinyMapItem();
             hmItem.setUuidString();
             hmItem.setTitle("Cafe 5");
             hmItem.setAddress("10 Changi Road, Singapore");
@@ -80,8 +79,8 @@ public class SecretPanelActivity extends ActionBarActivity {
     }
 
     private void addHashMap() {
-        Hashmap hm;
-        hm = new Hashmap();
+        TinyMap hm;
+        hm = new TinyMap();
         hm.setUuidString();
         hm.setTitle("#FaveShops");
         hm.saveEventually();
@@ -92,31 +91,27 @@ public class SecretPanelActivity extends ActionBarActivity {
 
         //Get Main Object
 
-        ParseQuery<Hashmap> query = ParseQuery.getQuery("Hashmap");
-        query.getInBackground("IMrgX3KPxo", new GetCallback<Hashmap>() {
-                    public void done(final Hashmap hashmap1, ParseException e) {
+        ParseQuery<TinyMap> query = ParseQuery.getQuery("TinyMap");
+        query.getInBackground("IMrgX3KPxo", new GetCallback<TinyMap>() {
+                    public void done(final TinyMap tinyMap1, ParseException e) {
                         if (e == null) {
-
-//                            hashmap1 = object;
                             Log.i("retrieve hashmap", "retrieved");
 
-//                            ArrayList<HashmapItem> HashmapItemsArray = new ArrayList<>();
-
-                            final ArrayList<HashmapItem> HashmapItemsArray = (ArrayList<HashmapItem>) hashmap1.get("hashmapItemList");
+                            final ArrayList<TinyMapItem> tinyMapItemsArray = (ArrayList<TinyMapItem>) tinyMap1.get("hashmapItemList");
 
                             //Get subobjects
-                            ParseQuery<HashmapItem> query2 = ParseQuery.getQuery("HashmapItem");
-                            query2.getInBackground("AXfhaoEkm0", new GetCallback<HashmapItem>() {
-                                public void done(HashmapItem hashmapItem, ParseException e) {
+                            ParseQuery<TinyMapItem> query2 = ParseQuery.getQuery("TinyMapItem");
+                            query2.getInBackground("AXfhaoEkm0", new GetCallback<TinyMapItem>() {
+                                public void done(TinyMapItem tinyMapItem, ParseException e) {
                                     if (e == null) {
                                         Log.i("retrieve hashmapitem", "retrieved");
 
                                         //Build array
-                                        HashmapItemsArray.add(hashmapItem);
+                                        tinyMapItemsArray.add(tinyMapItem);
 
                                         //Link to Main Object
-                                        hashmap1.put("hashmapItemList", HashmapItemsArray);
-                                        hashmap1.saveEventually();
+                                        tinyMap1.put("hashmapItemList", tinyMapItemsArray);
+                                        tinyMap1.saveEventually();
                                         Log.i("retrieve hashmap", "end");
 
                                     } else {
@@ -142,7 +137,7 @@ public class SecretPanelActivity extends ActionBarActivity {
     }
 
     private void addCustomHashMap() {
-        Intent intent = new Intent(this, NewHashmapActivity.class);
+        Intent intent = new Intent(this, NewTinyMapActivity.class);
         startActivity(intent);
     }
 

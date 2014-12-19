@@ -16,42 +16,42 @@ import com.parse.SaveCallback;
 /*
  * SecretPanel Activity
  */
-public class NewHashmapActivity extends Activity {
+public class NewTinyMapActivity extends Activity {
 
     Button saveButton;
     private Button deleteButton;
-    private EditText hashmapText;
-    private Hashmap hashmap;
-    private String hashmapId = null;
+    private EditText text;
+    private TinyMap tinyMap;
+    private String tinymapId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_hashmap);
+        setContentView(R.layout.activity_new_tinymap);
 
-        // Fetch the hashmapId from the Extra data
+        // Fetch the Id from the Extra data
         if (getIntent().hasExtra("ID")) {
-            hashmapId = getIntent().getExtras().getString("ID");
+            tinymapId = getIntent().getExtras().getString("ID");
         }
 
-        hashmapText = (EditText) findViewById(R.id.hashmap_text);
+        text = (EditText) findViewById(R.id.tinymap_text);
         saveButton = (Button) findViewById(R.id.saveButton);
         deleteButton = (Button) findViewById(R.id.deleteButton);
 
-        if (hashmapId == null) {
-            hashmap = new Hashmap();
-            hashmap.setUuidString();
+        if (tinymapId == null) {
+            tinyMap = new TinyMap();
+            tinyMap.setUuidString();
         } else {
-            ParseQuery<Hashmap> query = Hashmap.getQuery();
+            ParseQuery<TinyMap> query = TinyMap.getQuery();
             query.fromLocalDatastore();
-            query.whereEqualTo("uuid", hashmapId);
-            query.getFirstInBackground(new GetCallback<Hashmap>() {
+            query.whereEqualTo("uuid", tinymapId);
+            query.getFirstInBackground(new GetCallback<TinyMap>() {
 
                 @Override
-                public void done(Hashmap object, ParseException e) {
+                public void done(TinyMap object, ParseException e) {
                     if (!isFinishing()) {
-                        hashmap = object;
-                        hashmapText.setText(hashmap.getTitle());
+                        tinyMap = object;
+                        text.setText(tinyMap.getTitle());
                         deleteButton.setVisibility(View.VISIBLE);
                     }
                 }
@@ -65,10 +65,10 @@ public class NewHashmapActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                hashmap.setTitle(hashmapText.getText().toString());
-                hashmap.setDraft(true);
-                hashmap.setAuthor(ParseUser.getCurrentUser());
-                hashmap.pinInBackground(HashmapApplication.HASHMAP_GROUP_NAME,
+                tinyMap.setTitle(text.getText().toString());
+                tinyMap.setDraft(true);
+                tinyMap.setAuthor(ParseUser.getCurrentUser());
+                tinyMap.pinInBackground(TinyMapApplication.TINYMAP_GROUP_NAME,
                         new SaveCallback() {
 
                             @Override
@@ -95,9 +95,9 @@ public class NewHashmapActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                // The hashmap will be deleted eventually but will
+                // The item will be deleted eventually but will
                 // immediately be excluded from query results.
-                hashmap.deleteEventually();
+                tinyMap.deleteEventually();
                 setResult(Activity.RESULT_OK);
                 finish();
             }

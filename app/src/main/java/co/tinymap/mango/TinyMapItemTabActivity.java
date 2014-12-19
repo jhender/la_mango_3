@@ -38,12 +38,12 @@ import com.parse.SaveCallback;
  * not in active usage
  */
 
-public class HashmapItemTabActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class TinyMapItemTabActivity extends ActionBarActivity implements ActionBar.TabListener {
 
-    private static String selectedHashmap = "Hashmap";
-    private static String selectedHashmapId = "id";
-    static Hashmap hashmap1;
-    private static ArrayList<HashmapItem> hashmapItemArrayList = new ArrayList<>();
+    private static String selectedTinyMap = "tm";
+    private static String selectedTinyMapId = "id";
+    static TinyMap tinyMap1;
+    private static ArrayList<TinyMapItem> tinyMapItemArrayList = new ArrayList<>();
     private static boolean isNewHm = false;
 
     /**
@@ -64,7 +64,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hashmap_item_tab);
+        setContentView(R.layout.activity_tinymap_item_tab);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -100,29 +100,29 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                             .setTabListener(this));
         }
 
-        Log.i("hmitactivity", "0 seelectedhmID " + selectedHashmapId);
+        Log.i("hmitactivity", "0 seelectedhmID " + selectedTinyMapId);
 
         // get Intent
-        String incomingId = getIntent().getStringExtra("currentSelectedHashmapId");
-        selectedHashmapId = incomingId;
+        String incomingId = getIntent().getStringExtra("currentSelectedTinyMapId");
+        selectedTinyMapId = incomingId;
 
-        if (incomingId.equals(selectedHashmapId)) {
+        if (incomingId.equals(selectedTinyMapId)) {
             isNewHm = true;
         }
 
         // delete previous hashmap contents if new ID. Maybe I just should always delete it since it sometimes causes problems.
-//        if (string.equals(selectedHashmapId)) {
+//        if (string.equals(selectedTinyMapId)) {
 //            newHashmap = false;
 //            hashmapItemArrayList = new ArrayList<>();
 //
 //        } else {
 //            newHashmap = true;
-//            selectedHashmapId = string;
+//            selectedTinyMapId = string;
 //            hashmapItemArrayList = new ArrayList<>();
 //        }
-        hashmapItemArrayList = new ArrayList<>();
+        tinyMapItemArrayList = new ArrayList<>();
 
-        Log.i("hmitactivity", "1 selectedhmID " + selectedHashmapId);
+        Log.i("hmitactivity", "1 selectedhmID " + selectedTinyMapId);
 
     }
 
@@ -178,7 +178,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             // getItem is called to instantiate the fragment for the given page.
             switch(position) {
                 case 0:
-                    return new HashmapItemFragment();
+                    return new TinyMapItemFragment();
                 case 1:
                     return MapsFragment.newInstance();
 
@@ -199,9 +199,9 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_hashmapitemtab_section1).toUpperCase(l);
+                    return getString(R.string.title_tinymapitemtab_section1).toUpperCase(l);
                 case 1:
-                    return getString(R.string.title_hashmapitemtab_section2).toUpperCase(l);
+                    return getString(R.string.title_tinymapitemtab_section2).toUpperCase(l);
             }
             return null;
         }
@@ -235,7 +235,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_hashmap_item_tab, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_tinymap_item_tab, container, false);
             return rootView;
         }
     }
@@ -243,7 +243,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
     /*
      * This fragment gets ArrayList to display
      */
-    public static class HashmapItemFragment extends Fragment {
+    public static class TinyMapItemFragment extends Fragment {
         private LayoutInflater inflater;
         private CustomParseArrayAdapter customParseArrayAdapter;
 
@@ -251,23 +251,23 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            Log.i("hmitactivity", "hashmaparray is empty?: " + hashmapItemArrayList.isEmpty());
+            Log.i("hmitactivity", "array is empty?: " + tinyMapItemArrayList.isEmpty());
 //            Log.i("hmitactivity", "custom adapter is empty?: " + customParseArrayAdapter.i);
 
-            retrieveHashmap();
+            retrieveMap();
 //            setListAdapter(customParseArrayAdapter);
 
-            customParseArrayAdapter = new CustomParseArrayAdapter(getActivity().getBaseContext(), hashmapItemArrayList);
+            customParseArrayAdapter = new CustomParseArrayAdapter(getActivity().getBaseContext(), tinyMapItemArrayList);
 //            setListAdapter(customParseItemAdapter);
 //            setListShown(false);
-            Log.i("hmitactivity", "hashmaparray is empty?: " + hashmapItemArrayList.isEmpty());
+            Log.i("hmitactivity", "array is empty?: " + tinyMapItemArrayList.isEmpty());
             Log.i("hmitactivity", "custom adapter is empty?: " + customParseArrayAdapter.isEmpty());
 
 
         }
 
-        private void retrieveHashmap(){
-            ParseQuery<Hashmap> query1 = ParseQuery.getQuery("Hashmap");
+        private void retrieveMap(){
+            ParseQuery<TinyMap> query1 = ParseQuery.getQuery("TinyMap");
 
             if (isNewHm) {
                 query1.include("hashmapItemList");
@@ -278,15 +278,15 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             }
 
             //might want to re enable this if can pre fetch. include here is too slow.
-            query1.getInBackground(selectedHashmapId, new GetCallback<Hashmap>() {
-                        public void done(Hashmap object, ParseException e) {
+            query1.getInBackground(selectedTinyMapId, new GetCallback<TinyMap>() {
+                        public void done(TinyMap object, ParseException e) {
                             if (e == null) {
-                                hashmap1 = object;
-                                selectedHashmap = hashmap1.getTitle();
-                                Log.i("hmitactivity", "2 selectedHashmapId: " + selectedHashmap);
+                                tinyMap1 = object;
+                                selectedTinyMap = tinyMap1.getTitle();
+                                Log.i("hmitactivity", "2 selectedTinyMapId: " + selectedTinyMap);
 
                                 // set activity title
-                                getActivity().setTitle(selectedHashmap);
+                                getActivity().setTitle(selectedTinyMap);
 
                                 // retrieve hashmap items, put into local.
                                 retrieveHashmapItems();
@@ -302,18 +302,18 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         private void retrieveHashmapItems(){
 
             //Load the related items Array
-            hashmapItemArrayList = (ArrayList<HashmapItem>) hashmap1.get("hashmapItemList");
+            tinyMapItemArrayList = (ArrayList<TinyMapItem>) tinyMap1.get("hashmapItemList");
 //            List<HashmapItem> aList = hashmap1.getList("hashmapItemList");
 
-            Log.i("hmitactivity","3 attempt retrieve array: " + hashmapItemArrayList);
+            Log.i("hmitactivity","3 attempt retrieve array: " + tinyMapItemArrayList);
 //            Log.i("hmitactivity","3 attempt retrieve list: " + aList);
 //            Log.i("hmitactivity" , "4/ : " + hashmapItemArrayList.get(0).getTitle() );
 
-            if (hashmapItemArrayList != null) {
-                Log.i("hmitactivity","size: " + hashmapItemArrayList.size());
+            if (tinyMapItemArrayList != null) {
+                Log.i("hmitactivity","size: " + tinyMapItemArrayList.size());
 
-                for (int i = 0; i < hashmapItemArrayList.size(); i++) {
-                    HashmapItem hm = hashmapItemArrayList.get(i);
+                for (int i = 0; i < tinyMapItemArrayList.size(); i++) {
+                    TinyMapItem hm = tinyMapItemArrayList.get(i);
                     Log.i("hmitactivity" , "4/ hm: " + hm + " : " + hm.getTitle());
 //                    Log.i("hmitactivity" , "4/ list : " + aList.get(i).getTitle() + " : ");
 
@@ -335,13 +335,13 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             }
         }
 
-        private class CustomParseArrayAdapter extends ArrayAdapter<HashmapItem> {
+        private class CustomParseArrayAdapter extends ArrayAdapter<TinyMapItem> {
 //            private Context mContext;
 //            private ArrayList<HashmapItem> mItems;
 
 
-            public CustomParseArrayAdapter(Context context, ArrayList<HashmapItem> objects){
-                super(context, R.layout.list_item_hashmapitem, objects);
+            public CustomParseArrayAdapter(Context context, ArrayList<TinyMapItem> objects){
+                super(context, R.layout.list_item_tinymapitem, objects);
 //                this.mContext = context;
 //                this.mItems = objects;
                 Log.i("hmitactivity", "6 custom array adapter start");
@@ -349,7 +349,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                HashmapItem currentHMI = hashmapItemArrayList.get(position);
+                TinyMapItem currentHMI = tinyMapItemArrayList.get(position);
                 Log.i("hmitactivity", "position: " + position);
 
                 ViewHolder holder;
@@ -357,7 +357,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                     holder = new ViewHolder();
 
                     LayoutInflater inflater = LayoutInflater.from(getContext());
-                    convertView = inflater.inflate(R.layout.list_item_hashmapitem, parent, false);
+                    convertView = inflater.inflate(R.layout.list_item_tinymapitem, parent, false);
 
 //                    inflater = getActivity().getLayoutInflater();
                     holder.hmiTitle = (TextView) convertView.findViewById(R.id.hashmapitem_title);
@@ -387,7 +387,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_hashmap_item_tab, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_tinymap_item_tab, container, false);
 
             ListView hmitemListView = (ListView) rootView.findViewById(R.id.list_view3);
             LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
@@ -405,22 +405,16 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
 
-                    HashmapItem hashmapItem = customParseArrayAdapter.getItem(position);
-//                    currentSelectedHashmapTitle = hashmap.getTitle();
-//                    currentSelectedHashmapId = hashmap.getObjectId();
-//                    currentSelectedHashmap = hashmap;
+                    TinyMapItem tinyMapItem = customParseArrayAdapter.getItem(position);
 
-                    ParseAnalytics.trackEventInBackground("Select-HashmapItem");
+                    ParseAnalytics.trackEventInBackground("Select-TinyMapItem");
 
-                    hashmapItem.increment("clicks");
-                    hashmapItem.saveEventually();
+                    tinyMapItem.increment("clicks");
+                    tinyMapItem.saveEventually();
 
                     Intent intent = new Intent(view.getContext(), ItemDetailActivity.class);
-                    intent.putExtra("currentSelectedHashmapItemId", hashmapItem.getObjectId());
+                    intent.putExtra("currentSelectedTinyMapItemId", tinyMapItem.getObjectId());
                     startActivity(intent);
-//                    Intent intent = new Intent(view.getContext(), HashmapItemTabActivity.class);
-//                    intent.putExtra("currentSelectedHashmapItemId", hashmapItem.getObjectId());
-//                    startActivity(intent);
 
                 }
             });
@@ -435,7 +429,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
      */
     public static class OldHashmapItemFragment extends Fragment {
 
-        private ParseQueryAdapter<HashmapItem> hashmapItemListAdapter;
+        private ParseQueryAdapter<TinyMapItem> hashmapItemListAdapter;
         private LayoutInflater inflater;
 
         @Override
@@ -443,9 +437,9 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
             super.onCreate(savedInstanceState);
 
             // Set up the Parse query to use in the adapter
-            ParseQueryAdapter.QueryFactory<HashmapItem> factory = new ParseQueryAdapter.QueryFactory<HashmapItem>() {
-                public ParseQuery<HashmapItem> create() {
-                    ParseQuery<HashmapItem> query = HashmapItem.getQuery();
+            ParseQueryAdapter.QueryFactory<TinyMapItem> factory = new ParseQueryAdapter.QueryFactory<TinyMapItem>() {
+                public ParseQuery<TinyMapItem> create() {
+                    ParseQuery<TinyMapItem> query = TinyMapItem.getQuery();
                     query.orderByDescending("createdAt");
                     query.fromLocalDatastore();
                     return query;
@@ -462,18 +456,18 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 //            Log.i("hashmapitemListActivity", "on activity created" + hashmapItemListAdapter);
         }
 
-        private class hashmapItemListAdapter extends ParseQueryAdapter<HashmapItem> {
+        private class hashmapItemListAdapter extends ParseQueryAdapter<TinyMapItem> {
 
-            public hashmapItemListAdapter(Context context, QueryFactory<HashmapItem> queryFactory) {
+            public hashmapItemListAdapter(Context context, QueryFactory<TinyMapItem> queryFactory) {
                 super(context, queryFactory);
             }
 
             @Override
-            public View getItemView(HashmapItem hashmapitem, View view, ViewGroup parent) {
+            public View getItemView(TinyMapItem hashmapitem, View view, ViewGroup parent) {
                 ViewHolder holder;
                 if (view == null) {
                     inflater = getActivity().getLayoutInflater();
-                    view = inflater.inflate(R.layout.list_item_hashmapitem, parent, false);
+                    view = inflater.inflate(R.layout.list_item_tinymapitem, parent, false);
                     holder = new ViewHolder();
                     holder.hashmapTitle = (TextView) view.findViewById(R.id.hashmapitem_title);
                     holder.hmiDescription = (TextView) view.findViewById(R.id.hashmapitem_description);
@@ -504,10 +498,10 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
         }
 
         private void loadFromParse() {
-            ParseQuery<HashmapItem> query = HashmapItem.getQuery();
+            ParseQuery<TinyMapItem> query = TinyMapItem.getQuery();
 //            query.whereEqualTo("isDraft", false);
-            query.findInBackground(new FindCallback<HashmapItem>() {
-                public void done(List<HashmapItem> hashmapitems, ParseException e) {
+            query.findInBackground(new FindCallback<TinyMapItem>() {
+                public void done(List<TinyMapItem> hashmapitems, ParseException e) {
                     if (e == null) {
                         ParseObject.pinAllInBackground(hashmapitems,
                                 new SaveCallback() {
@@ -539,7 +533,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_tab_hashmapitemlist, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_main_tab_tinymapitemlist, container, false);
 
             ListView hmitemListView = (ListView) rootView.findViewById(R.id.hashmap_item_list_view);
             LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
@@ -551,7 +545,7 @@ public class HashmapItemTabActivity extends ActionBarActivity implements ActionB
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
 
-                    HashmapItem hashmapitem = hashmapItemListAdapter.getItem(position);
+                    TinyMapItem hashmapitem = hashmapItemListAdapter.getItem(position);
 
 //                    currentSelectedHashmapTitle = hashmapitem.getTitle();
 //                    Toast.makeText(getActivity(), "Item clicked " + currentSelectedHashmapTitle, Toast.LENGTH_SHORT).show();

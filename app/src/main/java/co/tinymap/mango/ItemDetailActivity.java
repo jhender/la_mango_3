@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,7 +16,7 @@ import com.parse.ParseException;
 
 public class ItemDetailActivity extends ActionBarActivity {
 
-    HashmapItem hashmapItem;
+    TinyMapItem tinyMapItem;
     TextView textView1;
     TextView textView2;
     TextView textView3;
@@ -37,7 +34,7 @@ public class ItemDetailActivity extends ActionBarActivity {
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
 
-        String incomingId = getIntent().getStringExtra("currentSelectedHashmapItemId");
+        String incomingId = getIntent().getStringExtra("currentSelectedTinyMapItemId");
 
         getItem(incomingId);
 
@@ -45,7 +42,7 @@ public class ItemDetailActivity extends ActionBarActivity {
         {   public void onClick(View v)
             {
 //                String url = "http://tinymap.co/m/" + hashmapItem.getUuidString();
-                String url = "Check out http://tinymap.co/m/" + hashmapItem.getTitle();
+                String url = "http://tinymap.co/m/" + tinyMapItem.getTitle();
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -65,14 +62,14 @@ public class ItemDetailActivity extends ActionBarActivity {
     //retrieve item from local datastore
     private void getItem(String id) {
 
-        ParseQuery<HashmapItem> query = HashmapItem.getQuery();
+        ParseQuery<TinyMapItem> query = TinyMapItem.getQuery();
         query.fromLocalDatastore();
-        query.getInBackground(id, new GetCallback<HashmapItem>() {
+        query.getInBackground(id, new GetCallback<TinyMapItem>() {
             @Override
 
-          public void done(HashmapItem object, ParseException e) {
+          public void done(TinyMapItem object, ParseException e) {
 //                if (!isFinishing()) {
-                hashmapItem = object;
+                tinyMapItem = object;
 ////                    todoText.setText(todo.getTitle());
 ////                    deleteButton.setVisibility(View.VISIBLE);
                 textView1.setText(object.getTitle());

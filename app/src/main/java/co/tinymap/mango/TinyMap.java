@@ -9,12 +9,12 @@ import java.util.UUID;
 
 /**
  * Created by jianhui.ho on 12/8/2014.
- * Creates Parse Object for HashMap
+ * Creates Parse Object for TinyMap
  */
-@ParseClassName("HashmapItem")
-public class HashmapItem extends ParseObject {
+@ParseClassName("TinyMap")
+public class TinyMap extends ParseObject {
 
-    public HashmapItem() {
+    public TinyMap() {
         //A default constructor is required.
     }
     public String getTitle() {
@@ -50,30 +50,9 @@ public class HashmapItem extends ParseObject {
         return getString("uuid");
     }
 
-    public static ParseQuery<HashmapItem> getQuery() {
-        return ParseQuery.getQuery(HashmapItem.class);
+    public static ParseQuery<TinyMap> getQuery() {
+        return ParseQuery.getQuery(TinyMap.class);
     }
-
-    public String getAddress() {
-        return getString("address");
-    }
-
-    public void setAddress(String address) {
-        put("address", address);
-    }
-
-    public String getDescription() {
-        return getString("description");
-    }
-
-    public void setDescription(String description) {
-        put("description", description);
-    }
-
-    /* TODO
-     * add in Relation to ParseObject Hashmap
-     *
-     */
 
 
 }
