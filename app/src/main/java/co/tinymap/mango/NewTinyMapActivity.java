@@ -66,27 +66,30 @@ public class NewTinyMapActivity extends Activity {
             public void onClick(View v) {
 
                 tinyMap.setTitle(text.getText().toString());
-                tinyMap.setDraft(true);
+                tinyMap.setDraft(false);
                 tinyMap.setAuthor(ParseUser.getCurrentUser());
-                tinyMap.pinInBackground(TinyMapApplication.TINYMAP_GROUP_NAME,
-                        new SaveCallback() {
+                tinyMap.saveEventually();
+                finish();
 
-                            @Override
-                            public void done(ParseException e) {
-                                if (isFinishing()) {
-                                    return;
-                                }
-                                if (e == null) {
-                                    setResult(Activity.RESULT_OK);
-                                    finish();
-                                } else {
-                                    Toast.makeText(getApplicationContext(),
-                                            "Error saving: " + e.getMessage(),
-                                            Toast.LENGTH_LONG).show();
-                                }
-                            }
-
-                        });
+//                tinyMap.pinInBackground(TinyMapApplication.TINYMAP_GROUP_NAME,
+//                        new SaveCallback() {
+//
+//                            @Override
+//                            public void done(ParseException e) {
+//                                if (isFinishing()) {
+//                                    return;
+//                                }
+//                                if (e == null) {
+//                                    setResult(Activity.RESULT_OK);
+//                                    finish();
+//                                } else {
+//                                    Toast.makeText(getApplicationContext(),
+//                                            "Error saving: " + e.getMessage(),
+//                                            Toast.LENGTH_LONG).show();
+//                                }
+//                            }
+//
+//                        });
             }
 
         });

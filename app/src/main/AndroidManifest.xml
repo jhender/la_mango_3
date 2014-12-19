@@ -47,10 +47,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TinyMapList"
-            android:label="Hashmap List" >
-        </activity>
-        <activity
             android:name=".NewTinyMapActivity"
             android:label="New Hashmap" >
         </activity>
@@ -113,7 +109,7 @@
         <activity
             android:name=".ItemDetailActivity"
             android:label="@string/title_activity_item_detail"
-            android:parentActivityName=".TinyMapList" >
+            android:parentActivityName=".TinyMapItemTabActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.tinymap.mango.MainTabActivity" />

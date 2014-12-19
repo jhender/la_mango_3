@@ -14,7 +14,7 @@ public class TinyMapApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		
-		// add Hashmap subclass
+		// add subclass
 		ParseObject.registerSubclass(TinyMap.class);
         ParseObject.registerSubclass(TinyMapItem.class);
 

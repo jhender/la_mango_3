@@ -76,7 +76,7 @@ public class MainActivity extends ActionBarActivity {
         button1.setOnClickListener(new View.OnClickListener()
         {   public void onClick(View v)
             {
-                Intent intent = new Intent(MainActivity.this, TinyMapList.class);
+                Intent intent = new Intent(MainActivity.this, MainTabActivity.class);
                 startActivity(intent);
                 finish();
             }

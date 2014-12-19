@@ -306,8 +306,6 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 //            List<HashmapItem> aList = hashmap1.getList("hashmapItemList");
 
             Log.i("hmitactivity","3 attempt retrieve array: " + tinyMapItemArrayList);
-//            Log.i("hmitactivity","3 attempt retrieve list: " + aList);
-//            Log.i("hmitactivity" , "4/ : " + hashmapItemArrayList.get(0).getTitle() );
 
             if (tinyMapItemArrayList != null) {
                 Log.i("hmitactivity","size: " + tinyMapItemArrayList.size());
@@ -336,9 +334,6 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
         }
 
         private class CustomParseArrayAdapter extends ArrayAdapter<TinyMapItem> {
-//            private Context mContext;
-//            private ArrayList<HashmapItem> mItems;
-
 
             public CustomParseArrayAdapter(Context context, ArrayList<TinyMapItem> objects){
                 super(context, R.layout.list_item_tinymapitem, objects);
@@ -420,143 +415,6 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
             });
 
             return rootView;
-        }
-    }
-
-
-    /* This fragment gets raw Items from Parse.
-     *
-     */
-    public static class OldHashmapItemFragment extends Fragment {
-
-        private ParseQueryAdapter<TinyMapItem> hashmapItemListAdapter;
-        private LayoutInflater inflater;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            // Set up the Parse query to use in the adapter
-            ParseQueryAdapter.QueryFactory<TinyMapItem> factory = new ParseQueryAdapter.QueryFactory<TinyMapItem>() {
-                public ParseQuery<TinyMapItem> create() {
-                    ParseQuery<TinyMapItem> query = TinyMapItem.getQuery();
-                    query.orderByDescending("createdAt");
-                    query.fromLocalDatastore();
-                    return query;
-                }
-            };
-
-
-
-            loadFromParse();
-
-//            popularListAdapter = new ParseQueryAdapter<>(getActivity(), factory);
-            hashmapItemListAdapter = new hashmapItemListAdapter(getActivity(), factory);
-
-//            Log.i("hashmapitemListActivity", "on activity created" + hashmapItemListAdapter);
-        }
-
-        private class hashmapItemListAdapter extends ParseQueryAdapter<TinyMapItem> {
-
-            public hashmapItemListAdapter(Context context, QueryFactory<TinyMapItem> queryFactory) {
-                super(context, queryFactory);
-            }
-
-            @Override
-            public View getItemView(TinyMapItem hashmapitem, View view, ViewGroup parent) {
-                ViewHolder holder;
-                if (view == null) {
-                    inflater = getActivity().getLayoutInflater();
-                    view = inflater.inflate(R.layout.list_item_tinymapitem, parent, false);
-                    holder = new ViewHolder();
-                    holder.hashmapTitle = (TextView) view.findViewById(R.id.hashmapitem_title);
-                    holder.hmiDescription = (TextView) view.findViewById(R.id.hashmapitem_description);
-                    holder.hmiAddress = (TextView) view.findViewById(R.id.hashmapitem_address);
-                    view.setTag(holder);
-                } else {
-                    holder = (ViewHolder) view.getTag();
-                }
-                TextView hmiDescription = holder.hmiDescription;
-                TextView hmiTitle = holder.hashmapTitle;
-                TextView hmiAddress = holder.hmiAddress;
-                hmiTitle.setText(hashmapitem.getTitle());
-                hmiDescription.setText(hashmapitem.getDescription());
-                hmiAddress.setText(hashmapitem.getAddress());
-                if (hashmapitem.isDraft()) {
-                    hmiTitle.setTypeface(null, Typeface.ITALIC);
-                } else {
-                    hmiTitle.setTypeface(null, Typeface.NORMAL);
-                }
-                return view;
-            }
-        }
-
-        private static class ViewHolder {
-            TextView hashmapTitle;
-            TextView hmiDescription;
-            TextView hmiAddress;
-        }
-
-        private void loadFromParse() {
-            ParseQuery<TinyMapItem> query = TinyMapItem.getQuery();
-//            query.whereEqualTo("isDraft", false);
-            query.findInBackground(new FindCallback<TinyMapItem>() {
-                public void done(List<TinyMapItem> hashmapitems, ParseException e) {
-                    if (e == null) {
-                        ParseObject.pinAllInBackground(hashmapitems,
-                                new SaveCallback() {
-                                    public void done(ParseException e) {
-                                        if (e == null) {
-//                                            if (!isFinishing()) {
-                                            hashmapItemListAdapter.loadObjects();
-//                                            Log.i(
-//                                                    "hmitemListactivity", "retrieved, loadobjects"
-//                                            );
-
-//                                            Log.i("hmitemListactivity", "after loadobjects" + hashmapItemListAdapter);
-
-//                                            }
-                                        } else {
-//                                            Log.i("hmitemListactivity",
-//                                                    "Error pinning hashmaps: " + e.getMessage());
-                                        }
-                                    }
-                                });
-                    } else {
-//                        Log.i("popularListActivity",
-//                                "loadFromParse: Error finding pinned hashmaps: "
-//                                        + e.getMessage());
-                    }
-                }
-            });
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_tab_tinymapitemlist, container, false);
-
-            ListView hmitemListView = (ListView) rootView.findViewById(R.id.hashmap_item_list_view);
-            LinearLayout emptyView = (LinearLayout) rootView.findViewById(R.id.empty_item_view);
-            hmitemListView.setEmptyView(emptyView);
-            hmitemListView.setAdapter(hashmapItemListAdapter);
-
-            hmitemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-
-                    TinyMapItem hashmapitem = hashmapItemListAdapter.getItem(position);
-
-//                    currentSelectedHashmapTitle = hashmapitem.getTitle();
-//                    Toast.makeText(getActivity(), "Item clicked " + currentSelectedHashmapTitle, Toast.LENGTH_SHORT).show();
-
-                }
-            });
-
-//            Log.i("hashmapitemListActivity", "return view" + hashmapItemListAdapter);
-            return rootView;
-
-
         }
     }
 
