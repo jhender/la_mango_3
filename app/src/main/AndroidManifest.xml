@@ -116,7 +116,7 @@
             android:parentActivityName=".HashmapList" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="co.tinymap.mango.HashmapList" />
+                android:value="co.tinymap.mango.MainTabActivity" />
         </activity>
 
         <meta-data

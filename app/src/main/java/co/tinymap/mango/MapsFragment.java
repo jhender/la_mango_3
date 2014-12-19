@@ -21,7 +21,6 @@ public class MapsFragment extends SupportMapFragment {
 
     public MapsFragment() {
         super();
-
     }
 
     // newInstance is called from the Tab Activity.
