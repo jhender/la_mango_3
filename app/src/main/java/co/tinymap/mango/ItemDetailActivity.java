@@ -44,13 +44,15 @@ public class ItemDetailActivity extends ActionBarActivity {
         button1.setOnClickListener(new View.OnClickListener()
         {   public void onClick(View v)
             {
-                String url = "http://tinymap.co/m/" + hashmapItem.getUuidString();
+//                String url = "http://tinymap.co/m/" + hashmapItem.getUuidString();
+                String url = "Check out http://tinymap.co/m/" + hashmapItem.getTitle();
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
             }
         });
         //todo change this to a Share Via Intent. "Check out www.tinymap.co/m/adfoiuo-342343/"
+        //todo actually i prob need to share the TinyMap name instead.
 
         button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
