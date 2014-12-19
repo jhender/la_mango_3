@@ -39,7 +39,7 @@
     <string name="logged_in">Welcome, %1$s</string>
 
     <!-- Tab Activity -->
-    <string name="title_activity_main_tab">Tinymap</string>
+    <string name="title_activity_main_tab">TinyMap</string>
     <string name="title_section1">Popular</string>
     <string name="title_section2">Top</string>
     <string name="title_section3">-</string>
