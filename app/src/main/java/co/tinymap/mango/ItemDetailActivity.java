@@ -20,6 +20,8 @@ public class ItemDetailActivity extends ActionBarActivity {
     TextView textView1;
     TextView textView2;
     TextView textView3;
+    TextView textView4;
+
     Button button1;
     Button button2;
 
@@ -31,6 +33,8 @@ public class ItemDetailActivity extends ActionBarActivity {
         textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
         textView3 = (TextView) findViewById(R.id.textView3);
+        textView4 = (TextView) findViewById(R.id.textView4);
+
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
 
@@ -72,9 +76,21 @@ public class ItemDetailActivity extends ActionBarActivity {
                 tinyMapItem = object;
 ////                    todoText.setText(todo.getTitle());
 ////                    deleteButton.setVisibility(View.VISIBLE);
+
                 textView1.setText(object.getTitle());
-                textView2.setText(object.getDescription());
-                textView3.setText(object.getAddress());
+
+                if (object.getDescription() != null) {
+                    textView2.setText(object.getDescription());
+                }
+
+                if (object.getAddress() != null ) {
+                    textView3.setText(object.getAddress());
+                }
+
+                //test out geopoint
+                if (object.getGeopoint() != null) {
+                    textView4.setText(object.getGeopoint().toString());
+                }
 //                }
             }
         });

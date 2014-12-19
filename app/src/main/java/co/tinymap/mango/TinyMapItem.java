@@ -1,6 +1,7 @@
 package co.tinymap.mango;
 
 import com.parse.ParseClassName;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -70,10 +71,13 @@ public class TinyMapItem extends ParseObject {
         put("description", description);
     }
 
-    /* TODO
-     * add in Relation to ParseObject Hashmap
-     *
-     */
+    public ParseGeoPoint getGeopoint() {
+        return getParseGeoPoint("geopoint");
+    }
+
+    public void setGeoPoint(ParseGeoPoint gp) {
+        put("geopoint", gp);
+    }
 
 
 }
