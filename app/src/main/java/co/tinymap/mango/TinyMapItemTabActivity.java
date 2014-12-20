@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -27,17 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
-import com.parse.SaveCallback;
 
 /*
- * not in active usage
+ *
  */
 
 public class TinyMapItemTabActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -192,8 +187,8 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
             switch(position) {
                 case 0:
                     return new TinyMapItemFragment();
-//                case 1:
-//                    return MapsFragment.newInstance();
+                case 1:
+                    return new TMIProfileFragment();
 
 //                case 2:
 //                    return new ItemFragment();
@@ -203,8 +198,8 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 1;
+            // Show how many total pages.
+            return 2;
         }
 
         @Override
@@ -444,5 +439,40 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
         }
     }
 
+    /*
+     * This fragment to display the "profile" page of the TinyMap
+     */
+
+    public static class TMIProfileFragment extends Fragment {
+
+        public TMIProfileFragment(){
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                    Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_tmiprofile, container, false);
+
+            TextView tv = (TextView) rootView.findViewById(R.id.textView4);
+//            tv.setText(tinyMap1.getTitle());
+            //todo freaking need to retrieve tinyMap1 at the start of this darn Activity
+
+            return rootView;
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
+
+        //code to display some buttons, onclick listeners, name, author, stats, description?
+
+        //1 share this
+        //2 author by
+        //3 bookmark
+
+
+
+    }
 
 }
