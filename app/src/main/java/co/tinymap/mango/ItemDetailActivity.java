@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -41,8 +42,8 @@ public class ItemDetailActivity extends ActionBarActivity {
         button1.setOnClickListener(new View.OnClickListener()
         {   public void onClick(View v)
             {
-//                String url = "http://tinymap.co/m/" + hashmapItem.getUuidString();
-                String url = "http://tinymap.co/m/" + tinyMapItem.getTitle();
+//                String url = "http://tinymap.co/p/" + hashmapItem.getUuidString();
+                String url = "http://tinymap.co/p/" + tinyMapItem.getTitle();
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -60,24 +61,34 @@ public class ItemDetailActivity extends ActionBarActivity {
     }
 
     //retrieve item from local datastore
-    private void getItem(String id) {
+    private void getItem(final String id) {
 
         ParseQuery<TinyMapItem> query = TinyMapItem.getQuery();
-        query.fromLocalDatastore();
-        query.getInBackground(id, new GetCallback<TinyMapItem>() {
-            @Override
 
+//        query.fromLocalDatastore();
+        //this line above is giving problems.
+        //why? the id is wrong? it's not in local?
+        //use .fetchIfNeeded?
+
+        query.getInBackground(id, new GetCallback<TinyMapItem>() {
+          @Override
           public void done(TinyMapItem object, ParseException e) {
-//                if (!isFinishing()) {
-                tinyMapItem = object;
-////                    todoText.setText(todo.getTitle());
-////                    deleteButton.setVisibility(View.VISIBLE);
-                textView1.setText(object.getTitle());
-                textView2.setText(object.getDescription());
-                textView3.setText(object.getAddress());
-//                }
+                if (!isFinishing()) {
+                    Log.i("ItemDetailActivity", "getitem id=" + id);
+                    Log.i("ItemDetailActivity", "getitem obj=" + object);
+                    tinyMapItem = object;
+    ////                    todoText.setText();
+    ////                    deleteButton.setVisibility(View.VISIBLE);
+                    textView1.setText(tinyMapItem.getTitle());
+                    textView2.setText(object.getDescription());
+                    textView3.setText(object.getAddress());
+                }
             }
         });
+
+
+
+
 
     }
 

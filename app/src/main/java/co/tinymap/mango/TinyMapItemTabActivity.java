@@ -283,7 +283,6 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
             } else {
                 query1.fromLocalDatastore();
-
             }
 
             //might want to re enable this if can pre fetch. include here is too slow.
@@ -430,6 +429,8 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
                     Intent intent = new Intent(view.getContext(), ItemDetailActivity.class);
                     intent.putExtra("currentSelectedTinyMapItemId", tinyMapItem.getObjectId());
+//                    intent.putExtra("currentSelectedTinyMapItemId", tinyMapItem.);
+
                     startActivity(intent);
 
                 }
