@@ -45,7 +45,7 @@
     <string name="title_section3">-</string>
 
     <!-- tinymap tab activity -->
-    <string name="title_activity_tinymap_item_tab"> </string>
+    <string name="title_activity_tinymap_item_tab"></string>
     <string name="title_activity_tinymapitem_tab">Tinymap</string>
     <string name="title_tinymapitemtab_section1">List</string>
     <string name="title_tinymapitemtab_section2">Map</string>
@@ -54,7 +54,8 @@
 
     <!-- Secret Panel Activity -->
     <string name="title_activity_secret_panel">SecretPanelActivity</string>
-    <string name="title_activity_item_detail"> </string>
+    <string name="title_activity_item_detail"></string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_item_map">Map</string>
 
 </resources>

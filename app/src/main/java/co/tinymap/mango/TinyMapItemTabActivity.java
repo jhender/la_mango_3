@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -43,7 +45,7 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
     private static String selectedTinyMap = "tm";
     private static String selectedTinyMapId = "id";
     static TinyMap tinyMap1;
-    private static ArrayList<TinyMapItem> tinyMapItemArrayList = new ArrayList<>();
+    public static ArrayList<TinyMapItem> tinyMapItemArrayList = new ArrayList<>();
     private static boolean isNewHm = false;
 
     /**
@@ -126,27 +128,34 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_hashmap_item_tab, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_tinymap_item_tab, menu);
+        return true;
+    }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_settings) {
 //            return true;
 //        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+
+        //Map
+        if (id == R.id.show_map) {
+            Intent intent = new Intent(this, ItemMapActivity.class);
+//            intent.putExtra("currentSelectedTinyMapItemId", tinyMapItem.getObjectId());
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -179,8 +188,8 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
             switch(position) {
                 case 0:
                     return new TinyMapItemFragment();
-                case 1:
-                    return MapsFragment.newInstance();
+//                case 1:
+//                    return MapsFragment.newInstance();
 
 //                case 2:
 //                    return new ItemFragment();
@@ -191,7 +200,7 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 1;
         }
 
         @Override
