@@ -11,6 +11,7 @@
         android:fontFamily="sans-serif"
         android:layout_margin="20dp"
         android:textSize="20sp"
+        android:textColor="@color/black"
         android:layout_alignParentLeft="true" />
 
 
