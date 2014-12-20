@@ -104,12 +104,16 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
         Log.i("hmitactivity", "0 seelectedhmID " + selectedTinyMapId);
 
-        // get Intent
-        String incomingId = getIntent().getStringExtra("currentSelectedTinyMapId");
-        selectedTinyMapId = incomingId;
+        //get Intent
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String incomingId = getIntent().getStringExtra("currentSelectedTinyMapId");
+            selectedTinyMapId = incomingId;
+            Log.i("TinyMapItemTabActivity","incomingId: " + selectedTinyMapId);
 
-        if (incomingId.equals(selectedTinyMapId)) {
-            isNewHm = true;
+            if (incomingId.equals(selectedTinyMapId)) {
+                isNewHm = true;
+            }
         }
 
         // delete previous hashmap contents if new ID. Maybe I just should always delete it since it sometimes causes problems.

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.GetCallback;
+import com.parse.ParseAnalytics;
 import com.parse.ParseQuery;
 import com.parse.ParseException;
 
@@ -42,6 +43,7 @@ public class ItemDetailActivity extends ActionBarActivity {
         button1.setOnClickListener(new View.OnClickListener()
         {   public void onClick(View v)
             {
+                ParseAnalytics.trackEventInBackground("Select-ShareItemURL");
 //                String url = "http://tinymap.co/p/" + hashmapItem.getUuidString();
                 String url = "http://tinymap.co/p/" + tinyMapItem.getTitle();
                 Intent i = new Intent(Intent.ACTION_VIEW);
@@ -55,6 +57,7 @@ public class ItemDetailActivity extends ActionBarActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
                 Toast.makeText(getBaseContext(), "nothing yet" , Toast.LENGTH_SHORT).show();
+                ParseAnalytics.trackEventInBackground("Select-GoToMap");
             }
         });
 
