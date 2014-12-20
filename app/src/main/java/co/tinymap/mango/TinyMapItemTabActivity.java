@@ -302,6 +302,10 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
                             } else {
                                 Log.e("2 hmitactivity", "error");
+                                // it's error
+                                String s = "Sorry, there was an error.";
+                                TextView t = (TextView) getView().findViewById(R.id.empty_item_view_text);
+                                t.setText(s);
                             }
                         }
                     }
@@ -339,7 +343,15 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
                     customParseArrayAdapter.add(hm);
                 }
+            } else {
+
+                // it's empty
+                String s = "Sorry, no items found.";
+                TextView t = (TextView) getView().findViewById(R.id.empty_item_view_text);
+                t.setText(s);
             }
+
+
         }
 
         private class CustomParseArrayAdapter extends ArrayAdapter<TinyMapItem> {

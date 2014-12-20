@@ -304,6 +304,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
                                                 popularListAdapter.loadObjects();
 //                                            Log.i("popularListActivity", "after loadobjects" + popularListAdapter);
 
+
 //                                            }
                                         } else {
                                             Log.e("popularListActivity","Error pinning hashmaps: " + e.getMessage());
