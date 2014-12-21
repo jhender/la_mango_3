@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -22,14 +23,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
+import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.ui.ParseLoginBuilder;
 
 /*
  *
@@ -456,6 +461,7 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
             final TextView tv4 = (TextView) rootView.findViewById(R.id.textView4);
             final TextView tv5 = (TextView) rootView.findViewById(R.id.textView5);
             final TextView tv6 = (TextView) rootView.findViewById(R.id.textView6);
+            Button button7 = (Button) rootView.findViewById(R.id.button7);
 
             ParseQuery<TinyMap> query = TinyMap.getQuery();
             query.fromLocalDatastore();
@@ -470,6 +476,30 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
                 }
             });
 
+            button7.setOnClickListener(new View.OnClickListener()
+            {   public void onClick(View v)
+                {
+                    ParseAnalytics.trackEventInBackground("Select-TinyMap-Bookmark");
+
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+
+                    if (currentUser == null) {
+                        Log.i("TmiItemTabActivity","currentUser is Null");
+                    } else {
+                        Log.i("TmiItemTabActivity","currentUser is " + currentUser);
+                    }
+
+                    if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+                        Log.i("TmiItemTabActivity","currentUser is Null");
+                        ParseLoginBuilder builder = new ParseLoginBuilder(getActivity());
+                        startActivityForResult(builder.build(), 0);
+                    }
+                        //Bookmark requires Login. Hence need to call Parse
+                    Intent intent = new Intent(getActivity(), BookmarkDispatchActivity.class);
+                    intent.putExtra("code", 100);
+                    startActivity(intent);
+                }
+            });
 
             //todo freaking need to retrieve tinyMap1 at the start of this darn Activity
 
@@ -487,7 +517,7 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
         }
 
         private void updateText() {
-            Log.i("TmiTabActivity","updateText");
+            Log.i("TmiTabActivity", "updateText");
             Log.i("TmiTabActivity","updateText: " + tinyMap1.getTitle());
 
             TextView tv = (TextView) getView().findViewById(R.id.textView4);
