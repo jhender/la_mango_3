@@ -76,15 +76,18 @@ public class ItemDetailActivity extends ActionBarActivity {
         query.getInBackground(id, new GetCallback<TinyMapItem>() {
           @Override
           public void done(TinyMapItem object, ParseException e) {
-                if (!isFinishing()) {
+                if (!isFinishing() && e == null) {
                     Log.i("ItemDetailActivity", "getitem id=" + id);
                     Log.i("ItemDetailActivity", "getitem obj=" + object);
+
                     tinyMapItem = object;
     ////                    todoText.setText();
     ////                    deleteButton.setVisibility(View.VISIBLE);
                     textView1.setText(tinyMapItem.getTitle());
                     textView2.setText(object.getDescription());
                     textView3.setText(object.getAddress());
+                } else {
+                    Log.i("ItemDetailActivity", "getitem = null");
                 }
             }
         });
