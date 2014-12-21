@@ -63,6 +63,27 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tinymap_item_tab);
 
+        Log.i("TmiTabActivity", "0 selectedhmID " + selectedTinyMapId);
+
+        //get Intent
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String incomingId = getIntent().getStringExtra("currentSelectedTinyMapId");
+            selectedTinyMapId = incomingId;
+            Log.i("TmiTabActivity","0 incomingId: " + selectedTinyMapId);
+
+            if (incomingId.equals(selectedTinyMapId)) {
+                isNewHm = true;
+            }
+        }
+
+        tinyMapItemArrayList = new ArrayList<>();
+
+        Log.i("TmiTabActivity", "1 selectedhmID " + selectedTinyMapId);
+
+
+//        retrieveMap();
+
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -97,33 +118,7 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
                             .setTabListener(this));
         }
 
-        Log.i("hmitactivity", "0 seelectedhmID " + selectedTinyMapId);
 
-        //get Intent
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String incomingId = getIntent().getStringExtra("currentSelectedTinyMapId");
-            selectedTinyMapId = incomingId;
-            Log.i("TinyMapItemTabActivity","incomingId: " + selectedTinyMapId);
-
-            if (incomingId.equals(selectedTinyMapId)) {
-                isNewHm = true;
-            }
-        }
-
-        // delete previous hashmap contents if new ID. Maybe I just should always delete it since it sometimes causes problems.
-//        if (string.equals(selectedTinyMapId)) {
-//            newHashmap = false;
-//            hashmapItemArrayList = new ArrayList<>();
-//
-//        } else {
-//            newHashmap = true;
-//            selectedTinyMapId = string;
-//            hashmapItemArrayList = new ArrayList<>();
-//        }
-        tinyMapItemArrayList = new ArrayList<>();
-
-        Log.i("hmitactivity", "1 selectedhmID " + selectedTinyMapId);
 
     }
 
@@ -341,6 +336,11 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
                     customParseArrayAdapter.add(hm);
                 }
+
+                //update the text on the Profile fragment
+//                getActivity().getFragmentManager().findFragmentByTag("TMIProfileFragment");
+
+
             } else {
 
                 // it's empty
@@ -453,8 +453,21 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
                                     Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_tmiprofile, container, false);
 
-            TextView tv = (TextView) rootView.findViewById(R.id.textView4);
-//            tv.setText(tinyMap1.getTitle());
+            final TextView tv4 = (TextView) rootView.findViewById(R.id.textView4);
+            final TextView tv5 = (TextView) rootView.findViewById(R.id.textView5);
+
+            ParseQuery<TinyMap> query = TinyMap.getQuery();
+            query.fromLocalDatastore();
+            query.include("author");
+            query.getInBackground(selectedTinyMapId, new GetCallback<TinyMap>() {
+                @Override
+                public void done(TinyMap tinyMap, ParseException e) {
+                    tv4.setText(tinyMap.getTitle());
+                    tv5.setText(tinyMap.getAuthor().getUsername());
+                }
+            });
+
+
             //todo freaking need to retrieve tinyMap1 at the start of this darn Activity
 
             return rootView;
@@ -463,6 +476,20 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+//            ((TinyMapItemTabActivity)getActivity()).testMethod();
+
+
+
+        }
+
+        private void updateText() {
+            Log.i("TmiTabActivity","updateText");
+            Log.i("TmiTabActivity","updateText: " + tinyMap1.getTitle());
+
+            TextView tv = (TextView) getView().findViewById(R.id.textView4);
+            tv.setText(tinyMap1.getTitle());
+
         }
 
         //code to display some buttons, onclick listeners, name, author, stats, description?
@@ -474,5 +501,6 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
 
     }
+
 
 }
