@@ -455,6 +455,7 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
             final TextView tv4 = (TextView) rootView.findViewById(R.id.textView4);
             final TextView tv5 = (TextView) rootView.findViewById(R.id.textView5);
+            final TextView tv6 = (TextView) rootView.findViewById(R.id.textView6);
 
             ParseQuery<TinyMap> query = TinyMap.getQuery();
             query.fromLocalDatastore();
@@ -464,6 +465,8 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
                 public void done(TinyMap tinyMap, ParseException e) {
                     tv4.setText(tinyMap.getTitle());
                     tv5.setText(tinyMap.getAuthor().getUsername());
+                    tv6.setText(tinyMap.getDescription());
+
                 }
             });
 

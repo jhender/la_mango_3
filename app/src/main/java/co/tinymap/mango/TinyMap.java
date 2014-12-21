@@ -54,5 +54,15 @@ public class TinyMap extends ParseObject {
         return ParseQuery.getQuery(TinyMap.class);
     }
 
+    public String getDescription() {
+        return getString("description");
+    }
+
+    public void setDescription(String description) {
+        put("description", description);
+    }
+
+
+
 
 }
