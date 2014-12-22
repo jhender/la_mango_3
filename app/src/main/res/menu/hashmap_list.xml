@@ -3,14 +3,12 @@
 
     <item
         android:id="@+id/action_new"
-        android:icon="@drawable/ic_action_new"
         app:showAsAction="ifRoom"
         android:title="@string/action_new">
     </item>
 
     <item
         android:id="@+id/action_sync"
-        android:icon="@drawable/ic_action_refresh"
         app:showAsAction="ifRoom"
         android:title="@string/action_sync">
     </item>

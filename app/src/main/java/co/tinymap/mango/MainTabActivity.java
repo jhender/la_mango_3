@@ -292,6 +292,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         private void loadFromParse() {
             ParseQuery<TinyMap> query = TinyMap.getQuery();
             query.whereEqualTo("isDraft", false);
+            query.include("author");
 //            query.include("hashmapItemList");
             query.findInBackground(new FindCallback<TinyMap>() {
                 public void done(List<TinyMap> tinyMaps, ParseException e) {
@@ -303,6 +304,7 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 //                                            if (!isFinishing()) {
                                                 popularListAdapter.loadObjects();
 //                                            Log.i("popularListActivity", "after loadobjects" + popularListAdapter);
+
 
 //                                            }
                                         } else {

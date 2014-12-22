@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -17,6 +16,8 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,17 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
-import com.parse.SaveCallback;
 
 /*
- * not in active usage
+ *
  */
 
 public class TinyMapItemTabActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -43,7 +40,7 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
     private static String selectedTinyMap = "tm";
     private static String selectedTinyMapId = "id";
     static TinyMap tinyMap1;
-    private static ArrayList<TinyMapItem> tinyMapItemArrayList = new ArrayList<>();
+    public static ArrayList<TinyMapItem> tinyMapItemArrayList = new ArrayList<>();
     private static boolean isNewHm = false;
 
     /**
@@ -65,6 +62,27 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tinymap_item_tab);
+
+        Log.i("TmiTabActivity", "0 selectedhmID " + selectedTinyMapId);
+
+        //get Intent
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String incomingId = getIntent().getStringExtra("currentSelectedTinyMapId");
+            selectedTinyMapId = incomingId;
+            Log.i("TmiTabActivity","0 incomingId: " + selectedTinyMapId);
+
+            if (incomingId.equals(selectedTinyMapId)) {
+                isNewHm = true;
+            }
+        }
+
+        tinyMapItemArrayList = new ArrayList<>();
+
+        Log.i("TmiTabActivity", "1 selectedhmID " + selectedTinyMapId);
+
+
+//        retrieveMap();
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -100,53 +118,38 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
                             .setTabListener(this));
         }
 
-        Log.i("hmitactivity", "0 seelectedhmID " + selectedTinyMapId);
 
-        // get Intent
-        String incomingId = getIntent().getStringExtra("currentSelectedTinyMapId");
-        selectedTinyMapId = incomingId;
-
-        if (incomingId.equals(selectedTinyMapId)) {
-            isNewHm = true;
-        }
-
-        // delete previous hashmap contents if new ID. Maybe I just should always delete it since it sometimes causes problems.
-//        if (string.equals(selectedTinyMapId)) {
-//            newHashmap = false;
-//            hashmapItemArrayList = new ArrayList<>();
-//
-//        } else {
-//            newHashmap = true;
-//            selectedTinyMapId = string;
-//            hashmapItemArrayList = new ArrayList<>();
-//        }
-        tinyMapItemArrayList = new ArrayList<>();
-
-        Log.i("hmitactivity", "1 selectedhmID " + selectedTinyMapId);
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_hashmap_item_tab, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_tinymap_item_tab, menu);
+        return true;
+    }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_settings) {
 //            return true;
 //        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+
+        //Map
+        if (id == R.id.show_map) {
+            Intent intent = new Intent(this, ItemMapActivity.class);
+//            intent.putExtra("currentSelectedTinyMapItemId", tinyMapItem.getObjectId());
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -180,7 +183,7 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
                 case 0:
                     return new TinyMapItemFragment();
                 case 1:
-                    return MapsFragment.newInstance();
+                    return new TMIProfileFragment();
 
 //                case 2:
 //                    return new ItemFragment();
@@ -190,7 +193,7 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show how many total pages.
             return 2;
         }
 
@@ -274,7 +277,6 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
             } else {
                 query1.fromLocalDatastore();
-
             }
 
             //might want to re enable this if can pre fetch. include here is too slow.
@@ -293,6 +295,10 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
                             } else {
                                 Log.e("2 hmitactivity", "error");
+                                // it's error
+                                String s = "Sorry, there was an error.";
+                                TextView t = (TextView) getView().findViewById(R.id.empty_item_view_text);
+                                t.setText(s);
                             }
                         }
                     }
@@ -330,7 +336,20 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
                     customParseArrayAdapter.add(hm);
                 }
+
+                //update the text on the Profile fragment
+//                getActivity().getFragmentManager().findFragmentByTag("TMIProfileFragment");
+
+
+            } else {
+
+                // it's empty
+                String s = "Sorry, no items found.";
+                TextView t = (TextView) getView().findViewById(R.id.empty_item_view_text);
+                t.setText(s);
             }
+
+
         }
 
         private class CustomParseArrayAdapter extends ArrayAdapter<TinyMapItem> {
@@ -409,6 +428,8 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
                     Intent intent = new Intent(view.getContext(), ItemDetailActivity.class);
                     intent.putExtra("currentSelectedTinyMapItemId", tinyMapItem.getObjectId());
+//                    intent.putExtra("currentSelectedTinyMapItemId", tinyMapItem.);
+
                     startActivity(intent);
 
                 }
@@ -416,6 +437,69 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
             return rootView;
         }
+    }
+
+    /*
+     * This fragment to display the "profile" page of the TinyMap
+     */
+
+    public static class TMIProfileFragment extends Fragment {
+
+        public TMIProfileFragment(){
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                    Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_tmiprofile, container, false);
+
+            final TextView tv4 = (TextView) rootView.findViewById(R.id.textView4);
+            final TextView tv5 = (TextView) rootView.findViewById(R.id.textView5);
+
+            ParseQuery<TinyMap> query = TinyMap.getQuery();
+            query.fromLocalDatastore();
+            query.include("author");
+            query.getInBackground(selectedTinyMapId, new GetCallback<TinyMap>() {
+                @Override
+                public void done(TinyMap tinyMap, ParseException e) {
+                    tv4.setText(tinyMap.getTitle());
+                    tv5.setText(tinyMap.getAuthor().getUsername());
+                }
+            });
+
+
+            //todo freaking need to retrieve tinyMap1 at the start of this darn Activity
+
+            return rootView;
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+//            ((TinyMapItemTabActivity)getActivity()).testMethod();
+
+
+
+        }
+
+        private void updateText() {
+            Log.i("TmiTabActivity","updateText");
+            Log.i("TmiTabActivity","updateText: " + tinyMap1.getTitle());
+
+            TextView tv = (TextView) getView().findViewById(R.id.textView4);
+            tv.setText(tinyMap1.getTitle());
+
+        }
+
+        //code to display some buttons, onclick listeners, name, author, stats, description?
+
+        //1 share this
+        //2 author by
+        //3 bookmark
+
+
+
     }
 
 

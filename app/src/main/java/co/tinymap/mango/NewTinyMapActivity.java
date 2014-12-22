@@ -67,7 +67,7 @@ public class NewTinyMapActivity extends Activity {
 
                 tinyMap.setTitle(text.getText().toString());
                 tinyMap.setDraft(false);
-                tinyMap.setAuthor(ParseUser.getCurrentUser());
+//                tinyMap.setAuthor(ParseUser.getCurrentUser());
                 tinyMap.saveEventually();
                 finish();
 
