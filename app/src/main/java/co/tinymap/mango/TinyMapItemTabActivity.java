@@ -27,7 +27,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseAnonymousUtils;
@@ -483,25 +485,25 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
                     ParseUser currentUser = ParseUser.getCurrentUser();
 
+                    //check if logged in
                     if (currentUser == null) {
                         Log.i("TmiItemTabActivity","currentUser is Null");
                     } else {
                         Log.i("TmiItemTabActivity","currentUser is " + currentUser);
+                        addBookmark();
                     }
 
-                    if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
-                        Log.i("TmiItemTabActivity","currentUser is Null");
-                        ParseLoginBuilder builder = new ParseLoginBuilder(getActivity());
-                        startActivityForResult(builder.build(), 0);
-                    }
+//                    if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+//                        Log.i("TmiItemTabActivity","currentUser is Null");
+//                        ParseLoginBuilder builder = new ParseLoginBuilder(getActivity());
+//                        startActivityForResult(builder.build(), 0);
+//                    }
                         //Bookmark requires Login. Hence need to call Parse
-                    Intent intent = new Intent(getActivity(), BookmarkDispatchActivity.class);
-                    intent.putExtra("code", 100);
-                    startActivity(intent);
+//                    Intent intent = new Intent(getActivity(), BookmarkDispatchActivity.class);
+//                    intent.putExtra("code", 100);
+//                    startActivity(intent);
                 }
             });
-
-            //todo freaking need to retrieve tinyMap1 at the start of this darn Activity
 
             return rootView;
         }
@@ -509,11 +511,6 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
-//            ((TinyMapItemTabActivity)getActivity()).testMethod();
-
-
-
         }
 
         private void updateText() {
@@ -525,13 +522,37 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
 
         }
 
-        //code to display some buttons, onclick listeners, name, author, stats, description?
+        //Add bookmark
+        private void addBookmark() {
 
-        //1 share this
-        //2 author by
-        //3 bookmark
+            ParseUser user = ParseUser.getCurrentUser();
+            ArrayList<TinyMap> arrayList;
 
+            //retrieve current list
+            arrayList = (ArrayList) user.get("bookmarks");
 
+            Log.i("TmiTabActivity", tinyMap1.toString());
+            if (arrayList != null) {
+                Log.i("TmiTabActivity", arrayList.toString());
+            } else {
+                //if null, start new array
+                Log.i("TmiTabActivity", "so null");
+                arrayList = new ArrayList<>();
+            }
+            //add item to array
+            //check item is not already inside before adding
+            if ( !arrayList.contains(tinyMap1) ){
+                arrayList.add(tinyMap1);
+                user.put("bookmarks", arrayList);
+                user.saveEventually();
+                ParseAnalytics.trackEventInBackground("Select-TinyMap-BookmarkSuccess");
+                Toast.makeText(getActivity(), "Bookmark added", Toast.LENGTH_SHORT).show();
+            }
+
+            //todo add in bookmark tab to maintab
+            //todo add in bookmark display indicator on profilefragment
+            //todo add in RemoveBookmark
+        }
 
     }
 

@@ -108,10 +108,10 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
         super.onPrepareOptionsMenu(menu);
 
         // this only shows log in or log out commmand
-        boolean realUser = !ParseAnonymousUtils.isLinked(ParseUser
-                .getCurrentUser());
-        menu.findItem(R.id.action_login).setVisible(!realUser);
-        menu.findItem(R.id.action_logout).setVisible(realUser);
+//        boolean realUser = !ParseAnonymousUtils.isLinked(ParseUser
+//                .getCurrentUser());
+//        menu.findItem(R.id.action_login).setVisible(!realUser);
+//        menu.findItem(R.id.action_logout).setVisible(realUser);
         return true;
     }
 

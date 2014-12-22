@@ -3,6 +3,7 @@ package co.tinymap.mango;
 import android.app.Application;
 
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -25,9 +26,9 @@ public class TinyMapApplication extends Application {
 //        ParseCrashReporting.enable(this);
 
 		Parse.initialize(this, "hfhVukFAkDhY90KnLStI5k8phj2gtmaau05nIo5w", "Awt2mfIyP6wXdtjRLSWuyXPngRaOsgKaFNPwljxc");
-		ParseUser.enableAutomaticUser();
-//		ParseACL defaultACL = new ParseACL();
-//		ParseACL.setDefaultACL(defaultACL, true);
+//		ParseUser.enableAutomaticUser();
+		ParseACL defaultACL = new ParseACL();
+		ParseACL.setDefaultACL(defaultACL, true);
 	}
 	
 	
