@@ -122,13 +122,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <!-- <activity -->
-        <!-- android:name=".MapsFragment" -->
-        <!-- android:label="@string/title_activity_maps" > -->
-        <!-- <meta-data -->
-        <!-- android:name="android.support.PARENT_ACTIVITY" -->
-        <!-- android:value="co.tinymap.mango.HashmapList" /> -->
-        <!-- </activity> -->
         <activity
             android:name=".ItemMapActivity"
             android:label="@string/title_activity_item_map" >
@@ -136,6 +129,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.tinymap.mango.ItemDetailActivity" />
         </activity>
+
     </application>
 
 </manifest>
