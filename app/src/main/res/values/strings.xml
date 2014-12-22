@@ -48,7 +48,7 @@
     <string name="title_activity_tinymap_item_tab"></string>
     <string name="title_activity_tinymapitem_tab">Tinymap</string>
     <string name="title_tinymapitemtab_section1">List</string>
-    <string name="title_tinymapitemtab_section2">By</string>
+    <string name="title_tinymapitemtab_section2">Info</string>
     <string name="title_tinymapitemtab_section3">-</string>
     <string name="loading">Loading</string>
 

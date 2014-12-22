@@ -24,6 +24,7 @@ public class SecretPanelActivity extends ActionBarActivity {
     Button button4;
     TextView textView1;
     Button button5;
+    ParseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,11 @@ public class SecretPanelActivity extends ActionBarActivity {
         setContentView(R.layout.activity_secret_panel);
 
         textView1 = (TextView)findViewById(R.id.textView2);
-        textView1.setText("Current User: " + ParseUser.getCurrentUser().toString());
+
+        currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            textView1.setText("Current User: " + currentUser.toString());
+        }
 
         button2 = (Button)findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener()
@@ -120,19 +125,11 @@ public class SecretPanelActivity extends ActionBarActivity {
                                 }
                             });
 
-
-
-
-
                         } else {
                             Log.i("retrieve hashmap", "failed");
                         }
                     }
                 });
-
-
-
-
 
     }
 
