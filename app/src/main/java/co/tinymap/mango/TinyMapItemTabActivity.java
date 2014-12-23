@@ -488,6 +488,10 @@ public class TinyMapItemTabActivity extends ActionBarActivity implements ActionB
                     //check if logged in
                     if (currentUser == null) {
                         Log.i("TmiItemTabActivity","currentUser is Null");
+
+                        ParseLoginBuilder builder = new ParseLoginBuilder(getActivity());
+                        startActivityForResult(builder.build(), 0);
+
                     } else {
                         Log.i("TmiItemTabActivity","currentUser is " + currentUser);
                         addBookmark();
