@@ -57,7 +57,19 @@ public class ItemDetailActivity extends ActionBarActivity {
 
         button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
-                Toast.makeText(getBaseContext(), "nothing yet" , Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getBaseContext(), "nothing yet" , Toast.LENGTH_SHORT).show();
+
+                double latitude = tinyMapItem.getGeopoint().getLatitude();
+                double longitude = tinyMapItem.getGeopoint().getLongitude();
+                String label = tinyMapItem.getTitle();
+                String uriBegin = "geo:" + latitude + "," + longitude;
+                String query = latitude + "," + longitude + "(" + label + ")";
+                String encodedQuery = Uri.encode(query);
+                String uriString = uriBegin + "?q=" + encodedQuery + "&z=16";
+                Uri uri = Uri.parse(uriString);
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+
             }
         });
 
@@ -90,6 +102,7 @@ public class ItemDetailActivity extends ActionBarActivity {
                 //test out geopoint
                 if (object.getGeopoint() != null) {
                     textView4.setText(object.getGeopoint().toString());
+                    button2.setVisibility(View.VISIBLE);
                 }
 //                }
             }
