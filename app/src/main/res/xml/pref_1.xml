@@ -1,0 +1,21 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- This preference simply launches an intent when selected. Use this UI sparingly, per
+         design guidelines. -->
+    <Preference android:title="@string/pref_title_system_sync_settings">
+        <intent android:action="android.settings.SYNC_SETTINGS" />
+    </Preference>
+
+    <Preference android:title="Log In">
+        <intent android:action="android.settings.SYNC_SETTINGS" />
+    </Preference>
+
+    <Preference android:title="Secret Panel">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="co.tinymap.mango"
+            android:targetClass="co.tinymap.mango.SecretPanelActivity"
+            />
+    </Preference>
+
+</PreferenceScreen>

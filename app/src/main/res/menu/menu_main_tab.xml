@@ -5,17 +5,18 @@
 
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/secret_panel" android:title="Secret Panel"
-        android:orderInCategory="200" app:showAsAction="never" />
+
     <item
         android:id="@+id/action_logout"
         app:showAsAction="never"
-        android:title="@string/action_logout">
+        android:title="@string/action_logout"
+        android:orderInCategory="300">
     </item>
 
     <item
         android:id="@+id/action_login"
         app:showAsAction="never"
-        android:title="@string/action_login">
+        android:title="@string/action_login"
+        android:orderInCategory="300">
     </item>
 </menu>

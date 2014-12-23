@@ -130,6 +130,9 @@ public class MainTabActivity extends ActionBarActivity implements ActionBar.TabL
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+//            startActivityForResult(i, SETTINGS_RESULT);
+            startActivity(i);
             return true;
         }
 
